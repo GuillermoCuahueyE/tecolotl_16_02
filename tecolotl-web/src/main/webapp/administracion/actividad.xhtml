@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition template="/template/administracion/dashboard.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:pa="http://xmlns.jcp.org/jsf/composite/paginacion">
+    <f:metadata>
+        <f:viewAction action="#{administraActividadControlador.inicio}"/>
+    </f:metadata>
+    <ui:define name="menu">
+        <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav="">
+            <li class="uk-nav-header">#{otrosetiqueta['menu']}</li>
+            <li class="uk-parent uk-open">
+                <a><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/icono/escuela.svg"  styleClass="uk-icon uk-icon-image uk-margin-small-right" pt:uk-svg=""/><span class="uk-text-capitalize">#{administracion['menu.schools']}</span></a>
+                <ul class="uk-nav-sub">
+                    <li class="uk-active"><h:link outcome="dashboard"><h:outputText pt:uk-icon="home" styleClass="uk-margin-small-right"/><span class="uk-text-capitalize">#{administracion['menu.dashboard']}</span></h:link></li>
+                </ul>
+            </li>
+        </ul>
+    </ui:define>
+    <ui:define name="contenido">
+        <div class="uk-margin-medium-bottom uk-flex uk-flex-between">
+            <h:form id="formulario-actividad" styleClass="uk-display-inline-block" >
+                <h:inputHidden id="entrada-actividad" value="#{administraActividadControlador.actividad}"/>
+                <h:commandButton id="desactivar" styleClass="uk-button uk-button-primary" onclick="return seleccionActividad(event)" value="desactivar" action="#{administraActividadControlador.bloquea}"/>
+            </h:form>
+            <div>
+                <label for="actividades-canceladas">Videos caidos:</label>
+                <select id="actividades-canceladas" class="uk-select" style="width: 250px;">
+                    <option value="all">Ver actividades</option>
+                </select>
+            </div>
+            <div class="uk-display-inline-block ">
+                <form class="uk-search uk-search-default">
+                    <input class="uk-search-input" type="search" placeholder="Search..."/>
+                </form>
+                <button class="uk-button uk-button-primary" style="color: white;"> <h:panelGroup styleClass="uk-icon"  pt:uk-icon="search" /></button>
+            </div>
+        </div>
+        <div id="datos-conteo-actividades" class="uk-margin-bottom">
+            <span class="uk-margin-medium-right uk-text-bold">Total videos: <span/></span><span class="uk-text-bold">Videos desactivados: <span/></span>
+        </div>
+        <div class="contenido-actividades">
+            <ui:repeat value="#{administraActividadControlador.actividadModeloLista}" var="actividadModelo">
+                <div class="card-actividades-bloqueadas ${!actividadModelo.estatus ? 'card-adtividad-desactivado':''}" data-estatus="${actividadModelo.estatus}">
+                    <div class="card-actividades-bloqueadas-titulos">
+                        <label class="switch">
+                            <input type="radio" id="${actividadModelo.idVideo}" name="actividad" class="uk-checkbox" />
+                            <span class="slider round"/>
+                        </label>
+                    </div>
+                    <img src="https://i.ytimg.com/vi/${actividadModelo.idVideo}/mqdefault.jpg"/>
+                    <h6 class="uk-text-center ">${actividadModelo.idVideo}</h6>
+                </div>
+            </ui:repeat>
+        </div>
+    </ui:define>
+    <ui:define name="file-js">
+        <script type="application/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/administracion/actividad.js"></script>
+    </ui:define>
+</ui:composition>

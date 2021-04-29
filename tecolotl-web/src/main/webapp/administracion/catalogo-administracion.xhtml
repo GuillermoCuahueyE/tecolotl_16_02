@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pa="http://xmlns.jcp.org/jsf/composite/paginacion"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="/template/administracion/dashboard.xhtml">
+    <ui:define name="menu">
+        <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav="">
+            <li class="uk-nav-header">#{otrosetiqueta['menu']}</li>
+            <li class="uk-parent">
+                <a><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/icono/escuela.svg"  styleClass="uk-icon uk-icon-image uk-margin-small-right" pt:uk-svg=""/><span class="uk-text-capitalize">#{administracion['menu.schools']}</span></a>
+                <ul class="uk-nav-sub">
+                    <li><h:link outcome="dashboard"><h:outputText pt:uk-icon="home" styleClass="uk-margin-small-right"/><span class="uk-text-capitalize">#{administracion['menu.dashboard']}</span></h:link></li>
+                </ul>
+            </li>
+            <li class="uk-parent uk-open">
+                <h:link><h:outputText pt:uk-icon="database" styleClass="uk-margin-small-right"/><span class="uk-text-capitalize">#{administracion['menu.catalog']}</span></h:link>
+                <ul class="uk-nav-sub">
+                    <li class="uk-active"><a><h:outputText pt:uk-icon="home" styleClass="uk-margin-small-right"/><span class="uk-text-capitalize">#{administracion['menu.catalog.administrator']}</span></a></li>
+                    <li><h:link outcome="catalogo-coordinacion"><h:outputText pt:uk-icon="home" styleClass="uk-margin-small-right"/><span class="uk-text-capitalize">#{administracion['menu.catalog.coordinator']}</span></h:link></li>
+                </ul>
+            </li>
+            <li class="uk-parent">
+                <h:link><h:outputText pt:uk-icon="database" styleClass="uk-margin-small-right"/><span class="uk-text-capitalize">#{administracion['menu.coordinator']}</span></h:link>
+                <ul class="uk-nav-sub">
+                    <li><h:link outcome="dashboard-coordinador"><h:outputText pt:uk-icon="home" styleClass="uk-margin-small-right"/><span class="uk-text-capitalize">#{administracion['menu.dashboard']}</span></h:link></li>
+                    <li><h:link outcome="detalle-profesor"><h:outputText pt:uk-icon="home" styleClass="uk-margin-small-right"/><span class="uk-text-capitalize">#{administracion['menu.admingroup']}</span></h:link></li>
+                </ul>
+            </li>
+        </ul>
+    </ui:define>
+    <ui:define name="contenido">
+        <ui:remove>
+         <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/tablas.css"/>
+         <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/administracion/dashboard.css"/>
+             <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/administracion/date-picker.css"/>
+        </ui:remove>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/tablas.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/administracion/dashboard.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/administracion/date-picker.css"/>
+        <div class="uk-grid uk-grid-medium" data-uk-grid="">
+            <!-- catalogo Motivo Bloqueo -->
+            <div class="uk-width-1-2@l">
+                <div class="uk-card uk-card-default uk-card-small uk-card-hover">
+                    <div class="uk-card-header ">
+                        <div class="uk-grid uk-grid-small">
+                            <div class="uk-width-auto "><h4 class="uk-text-capitalize">#{administracion['catalogoadministrativo.administrator.bloc.catalog']}</h4></div>
+                            <div class="uk-width-expand uk-flex uk-flex-right">
+                                <h:form id="formulario-nuevo-bloqueo-catalogo">
+                                    <ul class="uk-iconnav">
+                                        <li>
+                                            <h:commandLink pt:uk-toggle="target: #modal-motivo-bloqueo">
+                                                <h:outputText styleClass="uk-icon-link uk-text-primary" pt:title="#{otrosboton['add']}" pt:data-uk-tooltip="" pt:data-uk-icon="icon: plus-circle; ratio: 1.5"/>
+                                                <f:ajax render="formulario-modal-editar" listener="#{catalogoMotivoBloqueControlador.limpiaModelo}"/>
+                                            </h:commandLink>
+                                        </li>
+                                    </ul>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card-body">
+                        <h:form id="formulario-tabla-motivo-bloqueo">
+                            <h:dataTable id="tabla-motivo-bloqueo"
+                                         value="#{catalogoMotivoBloqueControlador.collectionDataModel}"
+                                         binding="#{catalogoMotivoBloqueControlador.htmlDataTable}"
+                                         var="dato"
+                                         first="0"
+                                         rows="5"
+                                         styleClass="uk-table uk-table-divider uk-table-middle uk-table-hover"
+                                         footerClass="uk-background-primary"
+                                         columnClasses=",uk-text-center">
+                                <h:column headerClass="uk-background-primary uk-background-primary">
+                                    <f:facet name="header"><span class="letra-titulo ">#{administracion['catalogoadministrativo.blocking.reason.table.header.name']}</span></f:facet>
+                                    #{dato.valor}
+                                </h:column>
+                                <h:column headerClass="uk-background-primary uk-width-small uk-text-center uk-text-primary ">
+                                    <f:facet name="header"><span class="letra-titulo ">#{administracion['catalogoadministrativo.blocking.reason.table.header.editar']}</span></f:facet>
+                                    <h:commandLink pt:uk-toggle="target: #modal-motivo-bloqueo">
+                                        <h:outputText styleClass="uk-icon-button puntero uk-text-primary" pt:uk-icon="file-edit"/>
+                                        <f:setPropertyActionListener value="#{dato}" target="#{catalogoMotivoBloqueControlador.catalogoModelo}"/>
+                                        <f:ajax render="formulario-modal-editar"/>
+                                    </h:commandLink>
+                                </h:column>
+                                <f:facet name="footer">
+                                    <pa:pie-tabla htmlDataTable="#{catalogoMotivoBloqueControlador.htmlDataTable}"/>
+                                </f:facet>
+                            </h:dataTable>
+                        </h:form>
+                    </div>
+                    <div class="uk-card-footer">
+                        <f:ajax render="formulario-tabla-motivo-bloqueo:tabla-motivo-bloqueo formulario-botones-bloqueo">
+                            <h:form id="formulario-botones-bloqueo">
+                                <pa:boton-minimizado htmlDataTable="#{catalogoMotivoBloqueControlador.htmlDataTable}"/>
+                            </h:form>
+                        </f:ajax>
+                    </div>
+                </div>
+            </div>
+            <!-- / FIN catalogo motivo catalogo -->
+            <!-- catalog tipo contacto  -->
+            <div class="uk-width-1-2@m uk-width-1-1@s">
+                <div class="uk-card uk-card-default uk-card-small uk-card-hover uk-margin-medium-bottom">
+                    <div class="uk-card-header">
+                        <div class="uk-grid uk-grid-small">
+                            <div class="uk-width-auto "><h4 class="uk-text-capitalize">#{administracion['catalogoadministrativo.administrator.contact.catalog']}</h4></div>
+                            <div class="uk-width-expand uk-flex uk-flex-right">
+                                <div class="uk-width-expand uk-flex uk-flex-right">
+                                    <h:form id="formulario-nuevo-tipo-contacto">
+                                        <ul class="uk-iconnav">
+                                            <li>
+                                                <h:commandLink pt:uk-toggle="target: #modal-tipo-contacto">
+                                                    <h:outputText styleClass="uk-icon-link uk-text-primary" pt:title="#{otrosboton['add']}" pt:data-uk-tooltip="" pt:data-uk-icon="icon: plus-circle; ratio: 1.5"/>
+                                                    <f:ajax render="formulario-modal-tipo-contacto" listener="#{tipoContactoControlador.limpiaModelo}"/>
+                                                </h:commandLink>
+                                            </li>
+                                        </ul>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card-body">
+                        <h:form id="formulario-tabla-tipo-bloqueo">
+                            <h:dataTable id="tabla-tipo-bloqueo"
+                                         value="#{tipoContactoControlador.collectionDataModel}"
+                                         binding="#{tipoContactoControlador.htmlDataTable}"
+                                         var="dato"
+                                         first="0"
+                                         rows="5"
+                                         styleClass="uk-table uk-table-divider uk-table-middle uk-table-hover"
+                                         footerClass="uk-background-primary"
+                                         columnClasses=",uk-text-center">
+                                <h:column headerClass="uk-background-primary uk-background-primary">
+                                    <f:facet name="header"><span class="letra-titulo ">#{administracion['catalogoadministrativo.contact.table.header.name']}</span></f:facet>
+                                    #{dato.valor}
+                                </h:column>
+                                <h:column headerClass="uk-background-primary uk-width-small uk-text-center">
+                                    <f:facet name="header"><span class="letra-titulo ">#{otrosetiqueta['edit']}</span></f:facet>
+                                    <h:commandLink   pt:uk-toggle="target: #modal-tipo-contacto">
+                                        <h:outputText styleClass="uk-icon-button puntero uk-text-primary" pt:uk-icon="file-edit"/>
+                                        <f:setPropertyActionListener value="#{dato}" target="#{tipoContactoControlador.catalogoModelo}"/>
+                                        <f:ajax render="formulario-modal-tipo-contacto"/>
+                                    </h:commandLink>
+                                </h:column>
+                                <f:facet name="footer">
+                                    <pa:pie-tabla htmlDataTable="#{tipoContactoControlador.htmlDataTable}"/>
+                                </f:facet>
+                            </h:dataTable>
+                        </h:form>
+                    </div>
+                    <div class="uk-card-footer">
+                        <f:ajax render="formulario-tabla-tipo-bloqueo:tabla-tipo-bloqueo formulario-botones-tipo-bloqueo">
+                            <h:form id="formulario-botones-tipo-bloqueo">
+                                <pa:boton-minimizado htmlDataTable="#{tipoContactoControlador.htmlDataTable}"/>
+                            </h:form>
+                        </f:ajax>
+                    </div>
+                </div>
+            </div>
+            <!--    FIN catalogo tipo contacto -->
+            <!-- catalog colonias   -->
+            <div class="uk-width-1-2@m uk-width-1-1@s">
+                <div class="uk-card uk-card-default uk-card-small uk-card-hover uk-margin-medium-bottom">
+                    <div class="uk-card-header ">
+                        <div class="uk-grid uk-grid-small">
+                            <div class="uk-width-auto "><h4 class="uk-text-capitalize">#{administracion['catalogoadministrativo.administrator.colony.catalog']}</h4></div>
+                            <div class="uk-width-expand uk-flex uk-flex-right">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card-body">
+                        <h:form id="formulario-tabla-colonia" styleClass="uk-form-stacked">
+                            <h:panelGroup layout="block" styleClass="uk-margin-small-top" pt:uk-grid="">
+                                <div class="uk-width-1-3">
+                                    <h:outputLabel for="entrada-estado" value="estado" styleClass="uk-text-capitalize letra-desabilitada-negra"/>
+                                    <h:inputText id="entrada-estado" value="#{catalogoColoniaControlador.estado}" styleClass="uk-input  uk-text-bold" disabled="true"/>
+                                </div>
+                                <div class="uk-width-2-3">
+                                    <h:outputLabel for="entrada-municipio" value="municipio" styleClass="uk-text-capitalize letra-desabilitada-negra"/>
+                                    <h:inputText id="entrada-municipio" value="#{catalogoColoniaControlador.municipio}" styleClass="uk-input  uk-text-bold" disabled="true"/>
+                                </div>
+
+                            </h:panelGroup>
+                            <ui:fragment rendered="#{empty catalogoColoniaControlador.collectionDataModel.wrappedData}">
+                                <table class="uk-table uk-table-middle">
+                                    <thead class="uk-background-primary">
+                                    <tr>
+                                        <th><span class="letra-titulo">#{administracion['catalogoadministrativo.administrator.colony.catalog']}</span></th>
+                                        <th><span class="letra-titulo">#{otrosetiqueta['edit']}</span></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="uk-flex uk-flex-center">
+                                                <h:graphicImage library="img" name="vacio.svg" height="215" width="243" alt="vacio"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot class="uk-background-primary">
+                                    <tr>
+                                        <td colspan="5"><span class="letra-titulo">
+                                                <h:outputFormat value="#{otrosetiqueta['pages.total']}" styleClass="letra-titulo">
+                                                    <f:param value="#{catalogoColoniaControlador.htmlDataTable.rowCount}"/>
+                                                    <f:param value="#{catalogoColoniaControlador.htmlDataTable.rowCount}"/>
+                                                    <f:param value="#{catalogoColoniaControlador.htmlDataTable.rowCount}"/>
+                                                </h:outputFormat>
+                                            </span></td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </ui:fragment>
+                            <h:dataTable id="tabla-colonia"
+                                         value="#{catalogoColoniaControlador.collectionDataModel}"
+                                         binding="#{catalogoColoniaControlador.htmlDataTable}"
+                                         rendered="#{not empty catalogoColoniaControlador.collectionDataModel.wrappedData}"
+                                         var="dato"
+                                         first="0"
+                                         rows="5"
+                                         styleClass="uk-table uk-table-divider uk-table-middle uk-table-hover tabla-colonia-limite"
+                                         footerClass="uk-background-primary"
+                                         columnClasses=",uk-text-center">
+                                <h:column headerClass="uk-background-primary uk-width-small uk-text-center">
+                                    <f:facet name="header"><span class="letra-titulo ">#{administracion['catalogoadministrativo.administrator.colony.catalog']}</span></f:facet>
+                                    #{dato.nombre}
+                                </h:column>
+                                <h:column headerClass="uk-background-primary uk-width-small uk-text-center">
+                                    <f:facet name="header"><span class="letra-titulo ">#{otrosetiqueta['edit']}</span></f:facet>
+                                    <h:commandLink   pt:uk-toggle="target: #modal-agrega-colonia">
+                                        <h:outputText styleClass="uk-icon-button puntero uk-text-primary" pt:uk-icon="file-edit"/>
+                                        <f:setPropertyActionListener value="#{dato}" target="#{catalogoColoniaControlador.coloniaModelo}"/>
+                                        <f:ajax render="formulario-modal-colonia"/>
+                                    </h:commandLink>
+                                </h:column>
+                                <f:facet name="footer">
+                                    <pa:pie-tabla htmlDataTable="#{catalogoColoniaControlador.htmlDataTable}"/>
+                                </f:facet>
+                            </h:dataTable>
+                        </h:form>
+                    </div>
+                    <div class="uk-card-footer">
+                        <div class="uk-grid uk-grid-small">
+                            <div class="uk-width-auto ">
+                                <f:ajax render="formulario-tabla-colonia:tabla-colonia formulario-colonia">
+                                    <h:form id="formulario-colonia" styleClass="uk-form-horizontal">
+                                        <pa:boton-minimizado htmlDataTable="#{catalogoColoniaControlador.htmlDataTable}"/>
+                                    </h:form>
+                                </f:ajax>
+                            </div>
+                            <div class="uk-width-expand uk-flex uk-flex-right">
+                                <div class="uk-width-expand uk-flex uk-flex-right">
+                                    <h:form id="formulario-busca-colonia">
+                                        <h:message for="form-horizontal-text"
+                                                   style="max-width: 200px"
+                                                   errorClass="uk-text-danger uk-display-inline-block primera-mayuscula uk-margin-small-right"
+                                                   warnClass="uk-text-warning uk-display-inline-block primera-mayuscula uk-margin-small-right"
+                                                   infoClass="uk-text-primary uk-display-inline-block primera-mayuscula uk-margin-small-right"/>
+                                        <h:inputText styleClass="uk-input uk-form-width-small uk-text-left uk-margin-right"
+                                                     id="form-horizontal-text"
+                                                     binding="#{catalogoColoniaControlador.uiInputColonia}"
+                                                     value="#{catalogoColoniaControlador.coloniaModelo.codigoPostal}"
+                                                     pt:placeholder="#{administracion['catalogoadministrativo.colony.table.header.code.zip']}">
+                                            <f:validateRequired/>
+                                            <f:validateLength minimum="4" maximum="5"/>
+                                        </h:inputText>
+                                        <h:commandLink styleClass="uk-button uk-button-secondary uk-margin-small-right acomoda">
+                                            #{otrosboton['search']}
+                                            <h:outputText pt:uk-icon="icon: location" styleClass="uk-icon uk-margin-small-right"/>
+                                            <f:ajax execute="@form" render="@form formulario-tabla-colonia" listener="#{catalogoColoniaControlador.actualizaDataModel}"/>
+                                        </h:commandLink>
+                                    </h:form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--             /FIN colonias-->
+        </div>
+        <h:panelGroup layout="block" id="modal-motivo-bloqueo" pt:uk-modal="">
+            <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <h:form id="formulario-modal-editar" styleClass="uk-form-stacked">
+                    <div class="uk-modal-header uk-background-secondary">
+                        <p class="uk-h4 uk-text-center uk-text-bold">
+                            <h:outputText styleClass="letra-titulo uk-text-capitalize" value="editar catalogo" rendered="#{not empty catalogoMotivoBloqueControlador.catalogoModelo.clave}"/>
+                            <h:outputText styleClass="letra-titulo uk-text-capitalize" value="nuevo catalogo" rendered="#{empty catalogoMotivoBloqueControlador.catalogoModelo.clave}"/>
+                        </p>
+                    </div>
+                    <div class="uk-modal-body">
+                        <div class="uk-margin uk-text-capitalize">
+                            <h:outputLabel for="input-catalogo-bloqueo" styleClass="uk-form-label uk-text-capitalize" value="#{otrosetiqueta['description']}"/>
+                            <div class="uk-form-controls">
+                                <h:inputText styleClass="uk-input"
+                                             id="input-catalogo-bloqueo"
+                                             pt:placeholder="#{otrosetiqueta['write.text']}"
+                                             label="#{otrosetiqueta['description']}"
+                                             value="#{catalogoMotivoBloqueControlador.catalogoModelo.valor}">
+                                    <f:validateRequired/>
+                                    <f:validateLength minimum="3" maximum="20"/>
+                                </h:inputText>
+                            </div>
+                            <h:message for="input-catalogo-bloqueo" styleClass="uk-text-danger"/>
+                        </div>
+                    </div>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button class="uk-button uk-button-default uk-modal-close uk-margin-small-right" type="button">#{otrosboton['cancel']}</button>
+                        <h:commandButton value="#{otrosboton['add']}" styleClass="uk-button uk-button-secondary" rendered="#{not empty catalogoMotivoBloqueControlador.catalogoModelo.clave}">
+                            <f:ajax onevent="function cerrar(data) { cierraModal(data, 'modalEditar' ) }"
+                                    listener="#{catalogoMotivoBloqueControlador.actualiza}"
+                                    execute="@form"
+                                    render="formulario-tabla-motivo-bloqueo"/>
+                        </h:commandButton>
+                        <h:commandButton value="#{otrosboton['update']}" styleClass="uk-button uk-button-secondary" rendered="#{empty catalogoMotivoBloqueControlador.catalogoModelo.clave}">
+                            <f:ajax onevent="function cerrar(data) { cierraModal(data, 'modalEditar' ) }"
+                                    listener="#{catalogoMotivoBloqueControlador.inserta}"
+                                    execute="@form"
+                                    render="formulario-tabla-motivo-bloqueo"/>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup layout="block" id="modal-tipo-contacto" pt:uk-modal="">
+            <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <h:form id="formulario-modal-tipo-contacto" styleClass="uk-form-stacked">
+                    <div class="uk-modal-header uk-background-secondary">
+                        <p class="uk-h4 uk-text-center uk-text-bold">
+                            <h:outputText styleClass="letra-titulo uk-text-capitalize" value="editar catalogo" rendered="#{not empty tipoContactoControlador.catalogoModelo.clave}"/>
+                            <h:outputText styleClass="letra-titulo uk-text-capitalize" value="nuevo catalogo" rendered="#{empty tipoContactoControlador.catalogoModelo.clave}"/>
+                        </p>
+                    </div>
+                    <div class="uk-modal-body">
+                        <div class="uk-margin uk-text-capitalize">
+                            <h:outputLabel for="input-catalogo-bloqueo" styleClass="uk-form-label uk-text-capitalize" value="#{otrosetiqueta['description']}"/>
+                            <div class="uk-form-controls">
+                                <h:inputText styleClass="uk-input"
+                                             id="input-tipo-contacto"
+                                             pt:placeholder="#{otrosetiqueta['write.text']}"
+                                             label="#{otrosetiqueta['description']}"
+                                             value="#{tipoContactoControlador.catalogoModelo.valor}">
+                                    <f:validateRequired/>
+                                    <f:validateLength minimum="3" maximum="20"/>
+                                </h:inputText>
+                            </div>
+                            <h:message for="input-catalogo-bloqueo" styleClass="uk-text-danger"/>
+                        </div>
+                    </div>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button class="uk-button uk-button-default uk-modal-close uk-margin-small-right" type="button">#{otrosboton['cancel']}</button>
+                        <h:commandButton value="#{otrosboton['update']}" styleClass="uk-button uk-button-secondary" rendered="#{not empty tipoContactoControlador.catalogoModelo.clave}">
+                            <f:ajax onevent="function cerrar(data) { cierraModal(data, 'modalTipoContacto' ) }"
+                                    listener="#{tipoContactoControlador.actualiza}"
+                                    execute="@form"
+                                    render="formulario-tabla-tipo-bloqueo"/>
+                        </h:commandButton>
+                        <h:commandButton value="#{otrosboton['add']}" styleClass="uk-button uk-button-secondary" rendered="#{empty tipoContactoControlador.catalogoModelo.clave}">
+                            <f:ajax onevent="function cerrar(data) { cierraModal(data, 'modalTipoContacto' ) }"
+                                    listener="#{tipoContactoControlador.inserta}"
+                                    execute="@form"
+                                    render="formulario-tabla-tipo-bloqueo"/>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup layout="block" id="modal-agrega-colonia" pt:uk-modal="">
+            <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <h:form id="formulario-modal-colonia" styleClass="uk-form-stacked">
+                    <div class="uk-modal-header uk-background-secondary">
+                        <p class="uk-h4 uk-text-center uk-text-bold"><h:outputText styleClass="letra-titulo uk-text-capitalize" value="#{administracion['catalogoadministrativo.administrator.modal.edit']}"/> </p>
+                    </div>
+                    <div class="uk-modal-body">
+                        <div class="uk-margin">
+                            <h:outputLabel styleClass="uk-form-label uk-text-capitalize" value="#{administracion['catalogoadministrativo.administrator.colony.catalog']}" for="entrada-colonia"/>
+                            <div class="uk-form-controls">
+                                <h:inputText id="entrada-colonia"
+                                             value="#{catalogoColoniaControlador.coloniaModelo.nombre}"
+                                             pt:placeholder="#{otrosetiqueta['write.text']}"
+                                             styleClass="uk-input">
+                                    <f:validateRequired/>
+                                    <f:validateLength minimum="3" maximum="70"/>
+                                </h:inputText>
+                            </div>
+                            <h:message for="entrada-colonia" styleClass="uk-text-danger"/>
+                        </div>
+                    </div>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button class="uk-button uk-button-default uk-modal-close uk-margin-small-right" type="button">#{otrosboton['cancel']}</button>
+                        <h:commandButton value="#{otrosboton['update']}" styleClass="uk-button uk-button-secondary">
+                            <f:ajax onevent="function funcion(data) { cierraModal(data, 'modalColonia') }" listener="#{catalogoColoniaControlador.actualiza}" execute="@form" render="formulario-tabla-colonia"/>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+            </div>
+        </h:panelGroup>
+        <script type="text/javascript">
+            var modalEditar;
+            var modalTipoContacto;
+            var modalColonia;
+            document.addEventListener("DOMContentLoaded", function (evt) {
+                modalEditar = document.querySelector('#modal-motivo-bloqueo');
+                modalTipoContacto = document.querySelector('#modal-tipo-contacto');
+                modalColonia = document.querySelector('#modal-agrega-colonia');
+                UIkit.util.on('#modal-motivo-bloqueo', 'show', function () {
+                    modalEditar.querySelector('.uk-modal-body').click();
+                });
+                UIkit.util.on('#modal-tipo-contacto', 'show', function () {
+                    modalTipoContacto.querySelector('.uk-modal-body').click();
+                });
+                UIkit.util.on('#modal-agrega-colonia', 'show',function () {
+                    modalColonia.querySelector('.uk-modal-body').click();
+                });
+            });
+            function cierraModal(data,modal) {
+                if (data.status === "success"){
+                    switch (modal) {
+                        case "modalTipoContacto":
+                            if (modalTipoContacto.querySelector('.uk-alert-danger') === null) {
+                                UIkit.modal(modalTipoContacto).hide();
+                            }
+                            break;
+                        case "modalEditar":
+                            if (modalEditar.querySelector('.uk-text-danger') === null) {
+                                UIkit.modal(modalEditar).hide();
+                            }
+                            break;
+                        case 'modalColonia':
+                            if (modalColonia.querySelector('uk-text-danger') === null) {
+                                UIkit.modal(modalColonia).hide();
+                            }
+                            break;
+                        default: console.error(modal);
+                    }
+                }
+            }
+        </script>
+    </ui:define>
+</ui:composition>
+</html>

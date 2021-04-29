@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>tecolotl</groupId>
+    <artifactId>tecolotl</artifactId>
+    <packaging>pom</packaging>
+    <version>0.1</version>
+    <name>tecolotl</name>
+    
+    <licenses>
+    	<license>
+    		<distribution>comercial</distribution>
+    	</license>
+    </licenses>
+    
+    <developers>
+    	<developer>
+    		<name>Ana Delia Cristóbal González</name>
+    		<email>ana.cristobal@nahtechnology.com</email>
+    		<roles>
+    			<role>Analista</role>
+    		</roles>
+    	</developer>
+    	<developer>
+    		<name>Antonio Francisco Alonso Valerdi</name>
+    		<email>antonio.alonso@nahtechnology.com</email>
+    		<roles>
+    			<role>Desarrollador Back</role>
+    			<role>Administrador Base de Datos</role>
+    		</roles>
+    	</developer>
+    </developers>
+  
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <!-- JBoss dependency versions -->
+        <version.wildfly.maven.plugin>1.2.0.Beta1</version.wildfly.maven.plugin>
+        <!-- EAP component version management BOM -->
+        <version.server.bom>7.1.0.GA</version.server.bom>
+        <version.jboss.spec.javaee.7.0>1.1.0.Final-redhat-3</version.jboss.spec.javaee.7.0>
+        <!-- other plugin versions -->
+        <version.compiler.plugin>3.1</version.compiler.plugin>
+        <version.ear.plugin>2.10</version.ear.plugin>
+        <version.ejb.plugin>2.3</version.ejb.plugin>
+        <version.surefire.plugin>2.16</version.surefire.plugin>
+        <version.war.plugin>2.5</version.war.plugin>
+        
+        <maven.compiler.source>1.8</maven.compiler.source>
+    	<maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    
+    <dependencyManagement>
+    	<dependencies>
+    		<dependency>
+    			<groupId>tecolotl</groupId>
+    			<artifactId>tecolotl-nucleo</artifactId>
+    			<version>${project.version}</version>
+    			<type>ejb</type>
+    		</dependency>
+    		<dependency>
+    			<groupId>tecolotl</groupId>
+    			<artifactId>tecolotl-alumno</artifactId>
+    			<version>${project.version}</version>
+    			<type>ejb</type>
+    		</dependency>
+    		<dependency>
+    			<groupId>tecolotl</groupId>
+    			<artifactId>tecolotl-administracion</artifactId>
+    			<version>${project.version}</version>
+    			<type>ejb</type>
+    		</dependency>
+            <dependency>
+                <groupId>tecolotl</groupId>
+                <artifactId>tecolotl-profesor</artifactId>
+                <version>${project.version}</version>
+                <type>ejb</type>
+            </dependency>
+    		<dependency>
+    			<groupId>tecolotl</groupId>
+    			<artifactId>tecolotl-web</artifactId>
+    			<version>${project.version}</version>
+    			<type>war</type>
+    			<scope>compile</scope>
+    		</dependency>
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-eap-javaee7-with-tools</artifactId>
+                <version>${version.server.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.spec</groupId>
+                <artifactId>jboss-javaee-7.0</artifactId>
+                <version>${version.jboss.spec.javaee.7.0}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+    	</dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>jboss-enterprise-maven-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>jboss-enterprise-maven-repository-ea</id>
+            <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>jboss-enterprise-maven-repository</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>jboss-enterprise-maven-repository-ea</id>
+            <url>https://maven.repository.redhat.com/earlyaccess/all/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>${version.wildfly.maven.plugin}</version>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <modules>
+    	<module>tecolotl-ear</module>
+    	<module>tecolotl-web</module>
+    	<module>tecolotl-nucleo</module>
+    	<module>tecolotl-alumno</module>
+        <module>tecolotl-administracion</module>
+        <module>tecolotl-profesor</module>
+    </modules>
+
+</project>

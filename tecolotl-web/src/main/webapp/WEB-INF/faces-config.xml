@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+			  version="2.2">
+
+	<!-- traduccion de las vistas -->
+
+	<application>
+<!--		<locale-config>-->
+<!--			<default-locale></default-locale>-->
+<!--		</locale-config>-->
+	</application>
+
+	<application>
+		<resource-bundle>
+			<base-name>etiqueta</base-name>
+			<var>etiqueta</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>otrosetiqueta</base-name>
+			<var>otrosetiqueta</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>boton</base-name>
+			<var>boton</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>otrosboton</base-name>
+			<var>otrosboton</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>administracion</base-name>
+			<var>administracion</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>alumno</base-name>
+			<var>alumno</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>profesor</base-name>
+			<var>profesor</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>coordinador</base-name>
+			<var>coordinador</var>
+		</resource-bundle>
+		<message-bundle>
+			validacion.Messages
+		</message-bundle>
+
+	</application>
+
+	<navigation-rule>
+		<from-view-id>/error/no-manejable.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>regresar</from-outcome>
+			<if>#{empty noManjableControlador.rol}</if>
+			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>regresar</from-outcome>
+			<if>#{not empty noManjableControlador.rol}</if>
+			<to-view-id>/#{noManjableControlador.rol}/dashboard.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/sin-permiso.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>regresar</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+</faces-config>

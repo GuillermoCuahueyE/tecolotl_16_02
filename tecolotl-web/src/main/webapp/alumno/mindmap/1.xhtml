@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<ui:composition template="/template/escolar/template-alumno.xhtml">
+    <f:metadata>
+        <f:viewParam name="cardinalidad" value="#{mapaMentalControlador.cardinalidad}" required="true"/>
+        <f:event type="postValidate" listener="#{mapaMentalControlador.validaParametro}"/>
+        <f:event type="preRenderView" listener="#{mapaMentalControlador.llenaLista}"/>
+    </f:metadata>
+    <ui:define name="hamburguesa">
+        <div class="color-nav uk-hidden@m">
+            <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar="">
+                <div class="">
+                    <a class="logo uk-logo" href="#">
+                        <img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/esquadron.svg" alt="logo" title="logo" width="30px" height="30px"/>
+                        <span class="lescuadron letra-logo uk-visible@m">squadron</span>
+                    </a>
+                </div>
+                <div class="uk-navbar-right ">
+                    <a class="uk-navbar-toggle" uk-navbar-toggle-icon="" href="" uk-toggle="target: #menu" type="button"/>
+                </div>
+                <div id="menu" uk-offcanvas="overlay: true">
+                    <div class="uk-offcanvas-bar  ">
+                        <button class="uk-offcanvas-close" type="button" uk-close=""/>
+                        <ul class="uk-thumbnav uk-thumbnav-vertical uk-position-top-center uk-margin-large-top">
+                            <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right">
+                                <h:link outcome="dashboard">
+                                    <img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg" width="40" alt=""/>
+                                </h:link>
+                            </li>
+                            <li uk-tooltip="title: #{alumno['for.all.views.mind.map']}; pos: right" class="uk-active"><h:link outcome="mapametal"><img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta4.svg" width="40" height="" alt="" /></h:link></li>
+                            <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right"><h:link outcome="free-library"><img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg" width="40" alt="" /></h:link></li>
+                        </ul>
+
+                    </div>
+                </div>
+            </nav>
+            <div class="barra-nav"></div>
+        </div>
+    </ui:define>
+    <ui:define name="menu">
+        <div class="left-content-box  content-box-dark">
+            <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/avatar/astronauta-nino.svg" alt="niño" class="profile-img" rendered="#{alumnoControlador.alumnoModelo.sexo eq 'm'}"/>
+            <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/avatar/astronauta-nina.svg" alt="niña" class="profile-img" rendered="#{alumnoControlador.alumnoModelo.sexo eq 'f'}"/>
+            <h6 class="uk-text-center uk-margin-remove-vertical text-light nombre-usuario">#{alumnoControlador.alumnoModelo.apodo} </h6>
+            <div class="uk-position-relative uk-text-center uk-display-block">
+                <a href="#" class="uk-text-small uk-text-muted uk-display-block uk-text-center uk-text-capitalize" data-uk-icon="icon: triangle-down; ratio: 0.7">#{etiqueta['menu']}</a>
+                <div class="uk-dropdown user-drop" data-uk-dropdown="mode: click; pos: bottom-center; animation: uk-animation-slide-bottom-small; duration: 150">
+
+                    <h:form>
+                        <h:commandLink styleClass="uk-text-capitalize" action="#{alumnoControlador.cerrarSesion()}" value="#{etiqueta['close.sesion']}"/>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+        <div class="left-nav-wrap  uk-visible@xl ">
+            <ul class="uk-thumbnav uk-thumbnav-vertical uk-position-center uk-margin-large-top">
+                <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right"><h:link outcome="dashboard"><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg" width="70" alt=""/></h:link></li>
+                <li uk-tooltip="title: #{alumno['for.all.views.mind.map']}; pos: right" class="uk-active"><h:link outcome="mapametal"><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta4.svg" width="70" height="" alt="" /></h:link></li>
+                <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right"><h:link outcome="free-library"><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg" width="70" alt="" /></h:link></li>
+            </ul>
+        </div>
+        <div class="left-nav-wrap uk-hidden@xl ">
+            <ul class="uk-thumbnav uk-thumbnav-vertical uk-position-center uk-margin-small-top">
+                <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right"><h:link outcome="dashboard"><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg" width="60" alt=""/></h:link></li>
+                <li uk-tooltip="title: #{alumno['for.all.views.mind.map']}; pos: right" class="uk-active"><h:link outcome="mapametal"><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta4.svg" width="60" height="" alt="" /></h:link></li>
+                <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right"><h:link outcome="free-library"><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg" width="60" alt="" /></h:link></li>
+            </ul>
+        </div>
+    </ui:define>
+    <ui:define name="contenido">
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/alumno/mapa-mental.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/letra.css"/>
+            <div class="uk-section ">
+                    <div class="uk-container uk-container-small fondo-mapa contorno">
+                        <div class="titulo-mapa-uno">
+                                <span class=" uk-text-uppercase">THE 5 W's CHART</span>
+                        </div>
+                        <h:panelGroup layout="block">
+                            <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/pop-art/boton-finished.svg" styleClass="desplaza1 final1" rendered="#{not empty mapaMentalControlador.tareaMapaMentalModeloLista[0].respuesta}"/>
+                           <!-- <span>Respondido</span>-->
+                        </h:panelGroup>
+                        <h:form class="uk-form-stacked" id="formulario-mapa-mental">
+                            <div class="uk-margin uk-grid" uk-grid="" >
+                                <div class="uk-width-expand">
+                                    <h:outputLabel styleClass="uk-form-label uk-text-bold label-map-uno"
+                                                   for="pregunta-0"
+                                                   value="#{mapaMentalControlador.tareaMapaMentalModeloLista[3].pregunta}"/>
+                                    <div class="uk-form-controls">
+                                        <h:inputTextarea styleClass="uk-textarea"
+                                                         id="pregunta-0" rows="3"
+                                                         disabled="#{not empty mapaMentalControlador.tareaMapaMentalModeloLista[3].respuesta}"
+                                                         value="#{mapaMentalControlador.tareaMapaMentalModeloLista[3].respuesta}"
+                                                         pt:maxlength="280">
+                                            <f:validateRequired/>
+                                        </h:inputTextarea>
+                                    </div>
+                                    <h:message for="pregunta-0" styleClass="mensaje-alerta-1"/>
+                                </div>
+                                <div class="img-mapa-who uk-width-auto uk-visible@m" >
+                                    <p class="letra-img-map-uno">Who</p>
+                                </div>
+                            </div>
+                            <div class="uk-margin uk-grid" uk-grid="">
+                                <div class="uk-width-expand  ">
+                                    <h:outputLabel styleClass="uk-form-label uk-text-bold label-map-uno"
+                                                   for="pregunta-1"
+                                                   value="#{mapaMentalControlador.tareaMapaMentalModeloLista[0].pregunta}"/>
+                                    <div class="uk-form-controls">
+                                        <h:inputTextarea styleClass="uk-textarea"
+                                                         id="pregunta-1" rows="3"
+                                                         disabled="#{not empty mapaMentalControlador.tareaMapaMentalModeloLista[0].respuesta}"
+                                                         value="#{mapaMentalControlador.tareaMapaMentalModeloLista[0].respuesta}"
+                                                         pt:maxlength="280">
+                                            <f:validateRequired/>
+                                        </h:inputTextarea>
+                                    </div>
+                                    <h:message for="pregunta-1" styleClass="mensaje-alerta-1"/>
+                                </div>
+                                <div class="img-mapa-what uk-width-auto uk-visible@m">
+                                    <p class="letra-img-map-uno">What</p>
+                                </div>
+                            </div>
+                            <div class="uk-margin uk-grid" uk-grid="">
+                                <div class="uk-width-expand  ">
+                                    <h:outputLabel styleClass="uk-form-label uk-text-bold label-map-uno" for="pregunta-2" value="#{mapaMentalControlador.tareaMapaMentalModeloLista[1].pregunta}"/>
+                                    <div class="uk-form-controls">
+                                        <h:inputTextarea styleClass="uk-textarea"
+                                                         id="pregunta-2" rows="3"
+                                                         disabled="#{not empty mapaMentalControlador.tareaMapaMentalModeloLista[1].respuesta}"
+                                                         value="#{mapaMentalControlador.tareaMapaMentalModeloLista[1].respuesta}"
+                                                         pt:maxlength="280">
+                                            <f:validateRequired/>
+                                        </h:inputTextarea>
+                                    </div>
+                                    <h:message for="pregunta-2" styleClass="mensaje-alerta-1"/>
+                                </div>
+                                <div class="img-mapa-when uk-width-auto uk-visible@m">
+                                    <p class="letra-img-map-uno"> When</p>
+                                </div>
+                            </div>
+                            <div class="uk-margin uk-grid" uk-grid="">
+                                <div class="uk-width-expand  ">
+                                    <h:outputLabel styleClass="uk-form-label uk-text-bold label-map-uno"
+                                                   for="pregunta-3"
+                                                   value="#{mapaMentalControlador.tareaMapaMentalModeloLista[2].pregunta}"/>
+                                    <div class="uk-form-controls">
+                                        <h:inputTextarea styleClass="uk-textarea"
+                                                         id="pregunta-3" rows="3"
+                                                         disabled="#{not empty mapaMentalControlador.tareaMapaMentalModeloLista[2].respuesta}"
+                                                         value="#{mapaMentalControlador.tareaMapaMentalModeloLista[2].respuesta}"
+                                                         pt:maxlength="280">
+                                            <f:validateRequired/>
+                                        </h:inputTextarea>
+                                    </div>
+                                    <h:message for="pregunta-3" styleClass="mensaje-alerta-1"/>
+                                </div>
+                                <div class="img-mapa-where uk-width-auto uk-visible@m">
+                                    <p class="letra-img-map-uno">Where</p>
+                                </div>
+                            </div>
+                            <div class="uk-margin uk-grid" uk-grid="">
+                                <div class="uk-width-expand  ">
+                                    <h:outputLabel styleClass="uk-form-label uk-text-bold label-map-uno"
+                                                   for="pregunta-4"
+                                                   value="#{mapaMentalControlador.tareaMapaMentalModeloLista[4].pregunta}"/>
+                                    <div class="uk-form-controls">
+                                        <h:inputTextarea styleClass="uk-textarea"
+                                                         id="pregunta-4" rows="3"
+                                                         disabled="#{not empty mapaMentalControlador.tareaMapaMentalModeloLista[4].respuesta}"
+                                                         value="#{mapaMentalControlador.tareaMapaMentalModeloLista[4].respuesta}"
+                                                         pt:maxlength="280">
+                                            <f:validateRequired/>
+                                        </h:inputTextarea>
+                                    </div>
+                                    <h:message for="pregunta-4" styleClass="mensaje-alerta-1"/>
+                                </div>
+                                <div class="img-mapa-why uk-width-auto uk-visible@m">
+                                    <p class="letra-img-map-uno">Why</p>
+                                </div>
+                            </div>
+
+                            <h:commandButton id="boton-enviar-mapa-mental"
+                                             value="#{boton['submit']}"
+                                             rendered="#{empty mapaMentalControlador.tareaMapaMentalModeloLista[0].respuesta}"
+                                             action="#{mapaMentalControlador.respondeMapaMental}"
+                                             styleClass="boton-enviar boton-gral5"/>
+                        </h:form>
+                    </div>
+            </div>
+    </ui:define>
+    <ui:define name="enlaces-js">
+        <script type="application/javascript">
+
+        </script>
+    </ui:define>
+</ui:composition>
+</html>

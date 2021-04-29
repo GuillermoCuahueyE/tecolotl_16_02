@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+		 version="3.1">
+
+	<display-name>tecolotl-web</display-name>
+
+	<context-param>
+		<param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<!-- servlet de jsf -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+
+	<!--	paginas de bienvenida	-->
+	<welcome-file-list>
+		<welcome-file>index.xhtml</welcome-file>
+	</welcome-file-list>
+
+	<!--	manejo de errores	-->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/no-encontrado.xhtml</location>
+	</error-page>
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/error/sin-permiso.xhtml</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/no-manejable.xhtml</location>
+	</error-page>
+
+	<mime-mapping>
+		<extension>ico</extension>
+		<mime-type>image/x-icon</mime-type>
+	</mime-mapping>
+
+	<!--  Project Stage	-->
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Development</param-value>
+	</context-param>
+
+	<context-param>
+		<description>Multiples archivos de configuración para la navegación</description>
+		<param-name>javax.faces.CONFIG_FILES</param-name>
+		<param-value>/WEB-INF/faces-config.xml,
+            /WEB-INF/alumno/reglas-navegacion.xml,
+            /WEB-INF/profesor/reglas-navegacion.xml,
+            /WEB-INF/administracion/reglas-navegacion.xml,/WEB-INF/coordinador/reglas-navegacion.xml</param-value>
+	</context-param>
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<!--  restriccion de seguridad  -->
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>seguridad-alumno</web-resource-name>
+			<url-pattern>/alumno/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+			<http-method>TRACE</http-method>
+			<http-method>HEAD</http-method>
+			<http-method>DELETE</http-method>
+			<http-method>CONNECT</http-method>
+			<http-method>OPTIONS</http-method>
+			<http-method>PUT</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>el usuario alumno</description>
+			<role-name>alumno</role-name>
+		</auth-constraint>
+		<user-data-constraint>
+			<transport-guarantee>NONE</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>seguridad-profesor</web-resource-name>
+			<url-pattern>/profesor/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+			<http-method>TRACE</http-method>
+			<http-method>HEAD</http-method>
+			<http-method>DELETE</http-method>
+			<http-method>CONNECT</http-method>
+			<http-method>OPTIONS</http-method>
+			<http-method>PUT</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>usuario-profesor</description>
+			<role-name>profesor</role-name>
+		</auth-constraint>
+		<user-data-constraint>
+			<transport-guarantee>NONE</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>seguridad-administracion</web-resource-name>
+			<url-pattern>/administracion/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+			<http-method>TRACE</http-method>
+			<http-method>HEAD</http-method>
+			<http-method>DELETE</http-method>
+			<http-method>CONNECT</http-method>
+			<http-method>OPTIONS</http-method>
+			<http-method>PUT</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>usuario-administrador</description>
+			<role-name>administrador</role-name>
+		</auth-constraint>
+		<user-data-constraint>
+			<transport-guarantee>NONE</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>seguridad-coordinador</web-resource-name>
+			<url-pattern>/coordinador/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+			<http-method>TRACE</http-method>
+			<http-method>HEAD</http-method>
+			<http-method>DELETE</http-method>
+			<http-method>CONNECT</http-method>
+			<http-method>OPTIONS</http-method>
+			<http-method>PUT</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>usuario-coordinador</description>
+			<role-name>coordinador</role-name>
+		</auth-constraint>
+		<user-data-constraint>
+			<transport-guarantee>NONE</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+
+	<!--  autentificacion por formulario  -->
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<realm-name>tecolotl-realm</realm-name>
+		<form-login-config>
+			<form-login-page>/ingreso.xhtml</form-login-page>
+			<form-error-page>/ingreso.xhtml?error=nologin</form-error-page>
+		</form-login-config>
+	</login-config>
+
+	<!--  roles  -->
+	<security-role>
+		<role-name>alumno</role-name>
+	</security-role>
+	<security-role>
+		<role-name>profesor</role-name>
+	</security-role>
+	<security-role>
+		<role-name>administrador</role-name>
+	</security-role>
+	<security-role>
+		<role-name>coordinador</role-name>
+	</security-role>
+
+</web-app>

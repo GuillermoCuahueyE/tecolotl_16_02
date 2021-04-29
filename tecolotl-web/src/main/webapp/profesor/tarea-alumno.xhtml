@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pa="http://xmlns.jcp.org/jsf/composite/paginacion">
+<ui:composition template="/template/profesor/dashboard-profesor.xhtml" >
+    <f:metadata>
+        <f:viewParam name="idAlumno" value="#{tareaAlumnoControlador.idAlumno}"/>
+        <f:viewAction action="#{tareaAlumnoControlador.detalle}"/>
+    </f:metadata>
+    <ui:define name="menu">
+            <ul class="uk-subnav nav-sub uk-visible@m " uk-margin="">
+                <li><h:link outcome="dashboard" value="#{etiqueta['home']}"/></li>
+                <li><h:link outcome="tablero" value="#{profesor['student.administration.title']}"/></li>
+                <li><span>Student Homework</span></li>
+            </ul>
+        <div>
+            <h:form><h:commandLink action="#{profesorControlador.cerrarSesion}" onclick="limpiarSession()" value="#{etiqueta['close.sesion']}"/></h:form>
+        </div>
+        <div class="uk-navbar-left uk-hidden@m">
+            <a class="uk-navbar-toggle" uk-navbar-toggle-icon="" href="" uk-toggle="target: #menu" type="button"/>
+        </div>
+        <div id="menu" uk-offcanvas="overlay: true">
+            <div class="uk-offcanvas-bar  ">
+                <button class="uk-offcanvas-close" type="button" uk-close=""/>
+                <ul class="uk-nav  nav-sub-offcanvas ">
+                    <li ><h:link outcome="dashboard-maestro" value="Home" styleClass="letra-color-subnav"/></li>
+                    <li class="uk-text-uppercase "><h:link styleClass="letra-color-subnav" outcome="admin-alumnos" value="Group Details"/></li>
+                </ul>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="contenido">
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/tablas.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/graficas.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/profesor/tarea-alumno.css"/>
+
+        <div class="uk-margin-large-top"><h1 class="uk-margin-top uk-text-capitalize lescuadron">#{profesor['tareas.alumno.title']}</h1></div>
+
+        <!--CARDS WRAPPER-->
+        <section class="uk-section uk-section-default uk-section-default uk-padding-remove-top " data-uk-filter="target: .js-filter">
+            <div class="uk-container uk-container-expand">
+                <ul class="uk-subnav uk-margin-top nav-default-profesor2 uk-subnav-alumno2">
+                    <li class="uk-active" data-uk-filter-control=".actividad-card"><a href="#">#{profesor['tareas.alumno.title.description']}</a></li>
+                </ul>
+                <div class="uk-grid elimina" uk-grid="">
+                    <div class="uk-width-1-3@m uk-first-column uk-margin-bottom">
+                        <div class="uk-card uk-card-default uk-card-small color-card-six margen-one">
+                            <div class="uk-card-header border-card">
+                                <div class="uk-grid-small uk-flex-middle uk-grid" uk-grid="">
+                                    <div class="uk-width-auto">
+                                        <img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/avatar/astronauta-nino.svg" class="uk-visible@s nino" alt=""/>
+                                    </div>
+                                    <div class="uk-width-expand">
+                                        <h3 class="uk-card-title uk-margin-remove-bottom uk-text-small uk-text-bold">
+                                            ${profesorGrupoControlador.alumnoModelo.nombre.concat(' ').concat(profesorGrupoControlador.alumnoModelo.apellidoPaterno).concat(' ').concat(profesorGrupoControlador.alumnoModelo.apellidoMaterno)}
+                                        </h3>
+                                    </div>
+                                    <div class="uk-width-1-1@s">
+                                        <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small uk-margin-small-bottom"><span class="uk-text-bold">#{profesor['tareas.alumno.nickname']}:</span> #{profesorGrupoControlador.alumnoModelo.apodo}</p>
+                                        <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small uk-margin-small-bottom"><span class="uk-text-bold">#{profesor['tareas.alumno.level']}:</span> #{profesorGrupoControlador.alumnoModelo.nivelLenguajeModelo.valor}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="uk-card-body padding-card-body">
+                                <h3 class="uk-text-uppercase uk-text-bold">#{etiqueta['group']}</h3>
+                                <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small uk-margin-small-bottom"><span class="uk-text-bold">#{profesor['tareas.alumno.grade']}:</span> #{profesorGrupoControlador.grupoModelo.grado}</p>
+                                <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small uk-margin-small-bottom"><span class="uk-text-bold">#{profesor['tareas.alumno.group']}:</span> #{profesorGrupoControlador.grupoModelo.grupo}</p>
+                                <span id="idProfesor" style="display: none">#{profesorGrupoControlador.grupoModelo.id}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="boton-regresa uk-width-2-3@m">
+                        <h:button styleClass="boton-maestro-base" value="#{boton['back']}" outcome="tablero"/>
+                        <button id="reporte" class="boton-escuadron-base uk-text-uppercase"  >report</button>
+                    </div>
+                </div>
+                <!--CARDS WRAPPER-->
+                <h:panelGroup layout="block" styleClass="uk-margin uk-grid uk-child-width-1-1@m">
+                    <div>
+                        <div class="titulo-section uk-text-center uk-text-bold">#{profesor['tareas.alumno.title.table']}</div>
+                    </div>
+                </h:panelGroup>
+                <div class="js-filter" data-uk-sortable="handle: .drag-icon">
+                    <!-- card -->
+                    <div class="actividad-card uk-container">
+                        <div>
+                            <div class="padding-0">
+                                <div class="uk-grid uk-margin-small-left uk-child-width-1-1@m" uk-grid="">
+                                    <div class="">
+                                        <div class="">
+                                            <ui:remove>
+                                            <div uk-form-custom="target: > * > span:first-child">
+                                                <select class="width-select" disabled="disabled">
+                                                    <option value="1">Ultimos 7 Dias</option>
+                                                    <option value="2">Ultimo mes</option>
+                                                    <option value="3">Ultimo año</option>
+                                                    <option value="4">Todos</option>
+                                                    <option value="5">Personalizado</option>
+                                                </select>
+                                                <button class="uk-button border-button width-button" type="button" tabindex="-1">
+                                                    <span/>
+                                                    <span uk-icon="icon: chevron-down"/>
+                                                </button>
+                                            </div>
+                                            </ui:remove>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="padding-0">
+                                <label for="filtro-nivel">Level:</label>
+                                <select name="" id="filtro-nivel" class="uk-margin-small-right">
+                                    <option value="todos">All</option>
+                                </select>
+                                <label for="filtro-grupo">Group:</label>
+                                <select name="" id="filtro-grupo" class="uk-margin-medium-right">
+                                    <option value="todos">All</option>
+                                </select>
+                                <span id="tareas-asignadas" class="uk-margin-medium-right">#{profesor['total.filters.assigned']}<span>0</span></span>
+                                <span id="tareas-promediadas" class="uk-margin-medium-right uk-hidden">#{profesor['total.filters.task']} <span>0</span></span>
+                                <span id="promedio-general" class="uk-margin-medium-right">#{profesor['total.filters.average']} <span>0</span></span>
+                                <div class="uk-overflow-auto">
+                                <h:form id="formulario-tabla-actividades">
+                                    <h:dataTable id="tabla-actividades"
+                                                 value="#{tareaAlumnoControlador.tareaAlumnoModeloLista}"
+                                                 var="tareaAlumno"
+                                                 styleClass="tabla-alumnos uk-table uk-table-small uk-table-middle tablaPrimaria uk-table-hover uk-text-center tabla-profesor-dropdown uk-margin-top"
+                                                 headerClass="borde-top-azul uk-text-center thPrimario"
+                                                 columnClasses="uk-width-small,uk-width-small,uk-width-small,uk-width-small"
+                                                 rowClasses="tdPrimario"
+                                                 footerClass="thPrimario uk-text-left">
+                                        <h:column>
+                                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{profesor['tareas.alumno.table.homework']}</span></f:facet>
+                                                <img class="img-previa uk-margin-small-right" src="https://i.ytimg.com/vi/${tareaAlumno.idActividad}/mqdefault.jpg" alt="" data-nivel="#{tareaAlumno.nivelLenguaje}" data-grupo="${tareaAlumno.grupo}" data-grado="${tareaAlumno.grado}"/>
+                                                <h:commandLink pt:uk-toggle="target: #modal-eliminar-tarea" >
+                                                    <h:outputText styleClass="uk-icon" pt:uk-icon="icon: trash" style="color: black; margin-top: 7px;"/>
+                                                    <f:setPropertyActionListener value="#{tareaAlumno.id}" target="#{tareaAlumnoControlador.idTarea}"/>
+                                                    <f:ajax render="formulario-eliminar:input-tarea" />
+                                                </h:commandLink>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{profesor['tareas.alumno.table.assigned']}</span></f:facet>
+                                            <h:outputText value="#{tareaAlumno.fechaAsignacion}">
+                                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                                            </h:outputText>
+                                        </h:column>
+                                        <h:column pt:data-transcrip="#{tareaAlumno.calificacionTrascirpcion}">
+                                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{profesor['tareas.alumno.transcript']}</span></f:facet>
+                                            <progress value="#{tareaAlumno.calificacionTrascirpcion}" min="0" max="100"/>
+                                        </h:column>
+                                        <h:column pt:data-gramatica="#{tareaAlumno.calificacionGramatica eq null ? -2:tareaAlumno.calificacionGramatica}">
+                                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{alumno['activities.bar.icon.order']}</span></f:facet>
+                                            <h:outputText pt:uk-icon="icon:ban; ratio:1.8" class="uk-text-danger" rendered="#{tareaAlumno.calificacionGramatica eq null}" />
+                                            <h:link outcome="gramatica" rendered="#{tareaAlumno.calificacionGramatica ne null and tareaAlumno.calificacionGramatica eq 0}">
+                                                <img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/icono/evaluar.svg" width="38" alt=""/>
+                                                <f:param name="idTarea" value="#{tareaAlumno.id}"/>
+                                            </h:link>
+                                            <ui:fragment rendered="#{tareaAlumno.calificacionGramatica ne null and tareaAlumno.calificacionGramatica ne 0}">
+                                                <progress value="#{tareaAlumno.calificacionGramatica}" min="0" max="100"/>
+                                            </ui:fragment>
+                                        </h:column>
+                                        <h:column pt:data-mapa-mental="#{tareaAlumno.calificacionMapamental eq null ? -2 : tareaAlumno.calificacionMapamental}">
+                                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{alumno['for.all.views.mind.map']}</span></f:facet>
+                                            <h:outputText pt:uk-icon="icon:ban; ratio:1.8" class="uk-text-danger" rendered="#{tareaAlumno.calificacionMapamental eq null}" />
+                                            <h:link outcome="mapamental" rendered="#{tareaAlumno.calificacionMapamental ne null and tareaAlumno.calificacionMapamental eq 0}">
+                                                <img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/icono/evaluar.svg" width="38" alt=""/>
+                                                <f:param name="idTarea" value="#{tareaAlumno.id}"/>
+                                            </h:link>
+                                            <ui:fragment rendered="#{tareaAlumno.calificacionMapamental ne null and tareaAlumno.calificacionMapamental ne 0}">
+                                                <progress value="#{tareaAlumno.calificacionMapamental}" min="0" max="100"/>
+                                            </ui:fragment>
+                                        </h:column>
+                                        <h:column pt:data-relacionar-imagen="#{tareaAlumno.calificacionRelacionarImagen eq null ? -2: tareaAlumno.calificacionRelacionarImagen}">
+                                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{alumno['more.activity.title.matching.words']}</span></f:facet>
+                                            <ui:fragment rendered="#{tareaAlumno.calificacionRelacionarImagen ne null}"><progress value="#{tareaAlumno.calificacionRelacionarImagen}" min="0" max="100"/></ui:fragment>
+                                            <h:outputText pt:uk-icon="icon:ban; ratio:1.8" class="uk-text-danger" rendered="#{tareaAlumno.calificacionRelacionarImagen eq null}" />
+                                        </h:column>
+                                        <h:column pt:data-completar-oracion="#{tareaAlumno.calificacionCompletar eq null ? -2 : tareaAlumno.calificacionCompletar}">
+                                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{alumno['activities.title.comple.all.sentences']}</span></f:facet>
+                                            <ui:fragment rendered="#{tareaAlumno.calificacionCompletar ne null}"><progress value="#{tareaAlumno.calificacionCompletar}" min="0" max="100"/></ui:fragment>
+                                            <h:outputText pt:uk-icon="icon:ban; ratio:1.8" class="uk-text-danger" rendered="#{tareaAlumno.calificacionCompletar eq null}" />
+                                        </h:column>
+                                        <h:column pt:data-ordenar-oraciones="#{tareaAlumno.calificacionOraciones eq null ? -2 : tareaAlumno.calificacionOraciones}">
+                                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{alumno['activities.title.order.sentences']}</span></f:facet>
+                                            <ui:fragment rendered="#{tareaAlumno.calificacionOraciones ne null}"><progress value="#{tareaAlumno.calificacionOraciones}" min="0" max="100"/></ui:fragment>
+                                            <h:outputText pt:uk-icon="icon:ban; ratio:1.8" class="uk-text-danger" rendered="#{tareaAlumno.calificacionOraciones eq null}" />
+                                        </h:column>
+                                        <h:column pt:data-relacionar-oraciones="#{tareaAlumno.calificacionRelacionarOraciones eq null ? -2 : tareaAlumno.calificacionRelacionarOraciones}">
+                                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{alumno['activities.bar.icon.match']}</span></f:facet>
+                                            <ui:fragment rendered="#{tareaAlumno.calificacionRelacionarOraciones ne null}"><progress value="#{tareaAlumno.calificacionRelacionarOraciones}" min="0" max="100"/></ui:fragment>
+                                            <h:outputText pt:uk-icon="icon:ban; ratio:1.8" class="uk-text-danger" rendered="#{tareaAlumno.calificacionRelacionarOraciones eq null}" />
+                                        </h:column>
+
+                                    </h:dataTable>
+                                </h:form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /card -->
+                </div>
+            </div>
+        </section>
+
+        <h:panelGroup layout="block" id="modal-eliminar-tarea" class="uk-flex-top" pt:uk-modal="">
+            <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <h:form id="formulario-eliminar">
+                    <div class="uk-modal-header " style="background-color: var(--color-peligro)">
+                        <h2 class="uk-modal-title uk-text-capitalize uk-text-center" style="color: white">delete homework</h2>
+                    </div>
+                    <div class="uk-modal-body " style="border-bottom-color: var(--color-peligro) ">
+                        ${profesor['tareas.alumno.delete.message']}
+                        <h:inputHidden id="input-tarea" value="#{tareaAlumnoControlador.idTarea}"/>
+                    </div>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button class="boton-escuadron-base uk-margin-small-right uk-modal-close" type="button" style="background-color: #AAB7B8">${boton['cancel']}</button>
+                        <h:commandButton styleClass="boton-escuadron-base  uk-modal-close" value="${boton['remove']}" style="background-color: var(--color-peligro)">
+                            <f:ajax execute="input-tarea" listener="#{tareaAlumnoControlador.borrar}" onevent="function f(data) {
+                               renderizarBorrado(data);
+                            }" render="formulario-tabla-actividades"/>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+            </div>
+        </h:panelGroup>
+        <div id="puntaje-reporte" style="display: none">
+            <span/>
+            <span/>
+            <span/>
+        </div>
+        <script type="text/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/Chart.js"></script>
+        <script type="text/javascript" >
+            document.addEventListener('DOMContentLoaded',function (ev) {
+                var botonReporte = document.querySelector('#reporte');
+                var idProfesor = document.querySelector('#idProfesor').innerText;
+                botonReporte.addEventListener('click',()=>{
+                    const queryString = window.location.search;
+                    const urlParams = new URLSearchParams(queryString);
+                    var alumno = urlParams.get('idAlumno');
+                    let totalTareas=document.querySelector('#puntaje-reporte span:first-child').textContent;
+                    let tareasCalificadas = document.querySelector('#puntaje-reporte span:nth-child(2)').textContent;
+                    let promedio = document.querySelector('#puntaje-reporte span:last-child').textContent.trim() === "Nothing answered yet!" ? -1:document.querySelector('#puntaje-reporte span:last-child').textContent.trim();
+                    var hiddenElement = document.createElement('a');
+                    console.log(alumno);
+                    UIkit.notification("The document is being downloaded, please wait",{timeout: 15000});
+                    hiddenElement.href = "https://reportes.e-squadron.com.mx/reporte-calificaciones?grupo=".concat(idProfesor,"&amp;alumno=",alumno,"&amp;totalTareas=",totalTareas,'&amp;totalCalificadas=',tareasCalificadas,"&amp;promedio=",promedio);
+                    console.log("https://reportes.e-squadron.com.mx/reporte-calificaciones?grupo=".concat(idProfesor,"&amp;alumno=",alumno));
+                    hiddenElement.click();
+                });
+
+                UIkit.util.on('#modal-eliminar-tarea', 'beforeshow', function () {
+                    document.getElementById('modal-eliminar-tarea').querySelector('.uk-modal-header').click();
+                });
+            });
+
+
+
+        </script>
+
+    </ui:define>
+    <ui:define name="file-js">
+<!--        <script type="application/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/profesor/tarea-alumno-tabla.js"></script>-->
+        <h:outputScript library="js" name="tarea-alumno-tabla.js"/>
+    </ui:define>
+</ui:composition>
+
+
+</html>

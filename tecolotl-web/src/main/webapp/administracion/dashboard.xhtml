@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:pa="http://xmlns.jcp.org/jsf/composite/paginacion">
+<ui:composition template="/template/administracion/dashboard.xhtml">
+
+    <ui:define name="menu">
+        <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav="">
+            <li class="uk-nav-header">#{otrosetiqueta['menu']}</li>
+            <li class="uk-parent uk-open">
+                <a><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/icono/escuela.svg"  styleClass="uk-icon uk-icon-image uk-margin-small-right" pt:uk-svg=""/><span class="uk-text-capitalize">#{administracion['menu.schools']}</span></a>
+                <ul class="uk-nav-sub">
+                    <li class="uk-active"><a><h:outputText pt:uk-icon="home" styleClass="uk-margin-small-right"/><span class="uk-text-capitalize">#{administracion['menu.dashboard']}</span></a></li>
+                    <li class="uk-active"><h:link outcome="actividad" ><h:outputText pt:uk-icon="video-camera" styleClass="uk-margin-small-right"/> Actividades</h:link></li>
+                </ul>
+            </li>
+
+        </ul>
+    </ui:define>
+
+    <ui:define name="contenido">
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/tablas.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/letra.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/administracion/scroll-esquadron.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/administracion/dashboard.css"/>
+        <h:panelGroup layout="block" styleClass="uk-grid uk-grid-divider uk-grid-medium uk-child-width-1-2 uk-child-width-1-4@l uk-child-width-1-5@xl" pt:data-uk-grid="">
+            <div class="uk-text-center">
+                <span ><h:outputText pt:uk-icon="users" styleClass="uk-text-primary uk-margin-small-right uk-text-capitalize"/><span class="uk-text-capitalize">#{administracion['dashboard.header.teacher']}</span></span>
+                <h1 class="uk-heading-primary uk-margin-remove uk-text-primary"><h:outputText value="#{escuelaPoblacionControlador.totalProfesores}" id="total-profesor"/></h1>
+            </div>
+            <div class="uk-text-center">
+                <span ><h:outputText pt:uk-icon="users" styleClass="uk-text-primary uk-margin-small-right uk-text-capitalize"/><span class="uk-text-capitalize">#{administracion['dashboard.header.student']}</span></span>
+                <h1 class="uk-heading-primary uk-margin-remove  uk-text-primary"><h:outputText value="#{escuelaPoblacionControlador.totalAlumnos}" id="total-alumnos"/></h1>
+                <div >
+                    <h:outputText styleClass="uk-text-success" value="#{escuelaPoblacionControlador.totalAlumnos eq 0 ? 0 : escuelaPoblacionControlador.totalAlumnos / escuelaPoblacionControlador.totalAlumnosLicencias}" id="porcentaje-alumno">
+                        <f:convertNumber type="percent"/>
+                    </h:outputText> #{administracion['dashboard.header.student.used']}.
+                </div>
+            </div>
+            <div class="uk-text-center">
+                <span><h:outputText pt:uk-icon="users" styleClass="uk-text-primary uk-margin-small-right uk-text-capitalize"/><span class="uk-text-capitalize">#{otrosetiqueta['unpaid.surplus']}</span></span>
+                <h1 class="uk-heading-primary uk-margin-remove uk-text-primary"><h:outputText value="#{escuelaPoblacionControlador.totalAlumnos - escuelaPoblacionControlador.totalAlumnosLicencias le 0 ? 0 : escuelaPoblacionControlador.totalAlumnos - escuelaPoblacionControlador.totalAlumnosLicencias}" id="total-alumnos-registro"/></h1>
+            </div>
+        </h:panelGroup>
+        <div class="uk-grid uk-grid-medium" data-uk-grid="">
+            <!-- panel -->
+            <div class="uk-width-1-1@s">
+                <div class="uk-card uk-card-default uk-card-small uk-card-hover">
+                    <div class="uk-card-header">
+                        <div class="uk-grid uk-grid-small">
+                            <div class="uk-width-1-3">
+                                <h4 class="uk-text-capitalize">
+                                    <span class="uk-text-middle">#{administracion['dashboard.title']}</span>
+                                </h4>
+                            </div>
+                            <div class="uk-width-1-3">
+                                <h:form styleClass="uk-search largo-buscar" id="formulario-filtrado-escuela">
+                                    <div class="uk-inline">
+                                        <h:commandLink styleClass="uk-form-icon uk-form-icon-flip uk-light busca"
+                                                       id="comando-busqueda"
+                                                       pt:uk-icon="icon: search"
+                                                       pt:uk-tooltip="title: Dar click en la lupa para buscar; delay:2000; pos:right"
+                                                       rendered="#{empty escuelaDashboardControlador.busqueda}">
+                                            <f:ajax render="formulario-tabla-escuela @form" execute="filtrado" listener="#{escuelaDashboardControlador.actualizaDataModel}"/>
+                                        </h:commandLink>
+                                        <h:commandLink styleClass="uk-form-icon uk-light uk-text-bold uk-form-icon-flip salir"
+                                                       pt:uk-icon="icon: close"
+                                                       pt:uk-tooltip="title: Dar click para borrar busqueda; delay:2000; pos:right"
+                                                       action="#{escuelaDashboardControlador.actualizaDataModel}"
+                                                       rendered="#{not empty escuelaDashboardControlador.busqueda}">
+                                            <f:setPropertyActionListener value="#{null}" target="#{escuelaDashboardControlador.busqueda}"/>
+                                            <f:ajax render="formulario-tabla-escuela @form"/>
+                                        </h:commandLink>
+                                        <h:inputText id="filtrado" disabled="#{empty escuelaDashboardControlador.collectionDataModel.wrappedData}"
+                                                     styleClass="#{empty escuelaDashboardControlador.busqueda ? 'uk-input' : 'uk-input filtrar uk-light fuente'}"
+                                                     pt:placeholder="#{administracion['label.search']}"
+                                                     autocomplete="off"
+                                                     value="#{escuelaDashboardControlador.busqueda}"
+                                                     pt:uk-tooltip="title: #{empty escuelaDashboardControlador.collectionDataModel.wrappedData
+                                                        ? administracion['dashboard.search.tooltip.diseble']
+                                                        : administracion['dashboard.search.tooltip.enable']}; delay:2000; pos:left">
+                                        </h:inputText>
+                                    </div>
+                                </h:form>
+                            </div>
+                            <div class="uk-width-expand uk-text-right panel-icons">
+                                <h:form id="formulario-agregar-escuela">
+                                    <h:commandLink styleClass="uk-icon-link uk-text-primary"
+                                                   pt:uk-icon="icon: plus-circle; ratio: 1.5"
+                                                   pt:uk-toggle="target: #modal-escuela"
+                                                   pt:uk-tooltip="title:#{administracion['dashboard.button.add']}; pos: left; delay: 2000">
+                                        <f:ajax listener="#{escuelaDashboardControlador.limpiaDetalleModelo}" render="formulario-escuela" onevent="function limpia(data) { limpiaSelect(data); }"/>
+                                    </h:commandLink>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card-body">
+                        <h:form id="formulario-tabla-escuela">
+                            <ui:fragment rendered="#{empty escuelaDashboardControlador.collectionDataModel.wrappedData}">
+                                <script type="text/javascript">
+                                    UIkit.notification({message:"#{administracion['dashboard.notification.notfound']}", status:'warning', pos:'top-right'});
+                                </script>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty escuelaDashboardControlador.collectionDataModel.wrappedData}">
+                                <table class="uk-table uk-table-middle">
+                                    <thead class="uk-background-primary">
+                                        <tr>
+                                            <th><span class="letra-titulo">#{administracion['catalogoadministrativo.school.table.cct']}</span></th>
+                                            <th><span class="letra-titulo">#{administracion['catalogoadministrativo.school.table.name']}</span></th>
+                                            <th><span class="letra-titulo">#{administracion['catalogoadministrativo.school.table.active']}</span></th>
+                                            <th><span class="letra-titulo">#{administracion['catalogoadministrativo.school.table.licenses']}</span></th>
+                                            <th><span class="letra-titulo">#{administracion['catalogoadministrativo.school.table.remaining.days']}</span></th>
+                                            <th><span class="letra-titulo ">#{administracion['title.all.tables.column.options']}</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6">
+                                                <div class="uk-flex uk-flex-center">
+                                                    <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/vacio.svg" height="215" width="243" alt="vacio"/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot class="uk-background-primary">
+                                        <tr>
+                                            <td colspan="6"><span class="letra-titulo">
+                                                <h:outputFormat value="#{otrosetiqueta['pages.total']}" styleClass="letra-titulo">
+                                                    <f:param value="#{escuelaDashboardControlador.htmlDataTable.rowCount}"/>
+                                                    <f:param value="#{escuelaDashboardControlador.htmlDataTable.rowCount}"/>
+                                                    <f:param value="#{escuelaDashboardControlador.htmlDataTable.rowCount}"/>
+                                                </h:outputFormat>
+                                            </span></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{not empty escuelaDashboardControlador.collectionDataModel.wrappedData}">
+                                <h:dataTable value="#{escuelaDashboardControlador.collectionDataModel}"
+                                             binding="#{escuelaDashboardControlador.htmlDataTable}"
+                                             var="escuela"
+                                             id="tabla-escuela"
+                                             first="0"
+                                             rows="5"
+                                             styleClass="uk-table uk-table-divider uk-table-middle uk-table-hover"
+                                             footerClass="uk-background-primary"
+                                             columnClasses=",,uk-text-center,uk-text-center,uk-text-center,uk-text-center,uk-text-center,uk-text-center">
+                                    <h:column headerClass="uk-background-primary uk-width-small">
+                                        <f:facet name="header">
+                                            <h:outputText styleClass="letra-titulo"
+                                                          value="#{administracion['catalogoadministrativo.school.table.cct']}"
+                                                          pt:uk-tooltip="title:#{administracion['dashboard.busqueda.cct']}; delay:2000; pos: top"/>
+                                        </f:facet>
+                                        <h:commandLink styleClass="uk-link-reset" value="#{escuela.claveCentroTrabajo}" action="#{escuelaPoblacionControlador.actualiza}">
+                                            <f:setPropertyActionListener value="#{escuela.claveCentroTrabajo}" target="#{escuelaPoblacionControlador.claveCentroTrabajo}"/>
+                                            <f:ajax render="total-alumnos total-profesor total-alumnos-registro porcentaje-alumno"/>
+                                        </h:commandLink>
+                                    </h:column>
+                                    <h:column headerClass="uk-background-primary">
+                                        <f:facet name="header"><span class="letra-titulo">#{administracion['catalogoadministrativo.school.table.name']}</span></f:facet>
+                                        #{escuela.nombre}
+                                    </h:column>
+                                    <h:column headerClass="uk-background-primary uk-width-small uk-text-center">
+                                        <f:facet name="header"><span class="letra-titulo">Alumno #{administracion['catalogoadministrativo.school.table.active']}</span></f:facet>
+                                        <h:outputText rendered="#{not escuela.bloqueoAlumno}" pt:uk-icon="check"/>
+                                        <h:outputText rendered="#{escuela.bloqueoAlumno}" pt:uk-icon="ban"/>
+                                    </h:column>
+                                    <h:column headerClass="uk-background-primary uk-width-small uk-text-center">
+                                        <f:facet name="header"><span class="letra-titulo">Otros #{administracion['catalogoadministrativo.school.table.active']}</span></f:facet>
+                                        <h:outputText rendered="#{not escuela.bloqueoProfesor}" pt:uk-icon="check"/>
+                                        <h:outputText rendered="#{escuela.bloqueoProfesor}" pt:uk-icon="ban"/>
+                                    </h:column>
+                                    <h:column headerClass="uk-background-primary uk-width-small uk-text-center">
+                                        <f:facet name="header"><span class="letra-titulo">#{administracion['catalogoadministrativo.school.table.licenses']}</span></f:facet>
+                                        #{escuela.licencias}
+                                    </h:column>
+                                    <h:column headerClass="uk-background-primary uk-width-small uk-text-center">
+                                        <f:facet name="header"><span class="letra-titulo">#{administracion['catalogoadministrativo.school.table.remaining.days']}</span></f:facet>
+                                        #{estatusControlador.busca(escuela.claveCentroTrabajo)}
+                                    </h:column>
+                                    <h:column headerClass="uk-background-primary uk-width-small uk-text-center">
+                                        <f:facet name="header"><span class="letra-titulo">#{administracion['catalogoadministrativo.school.table.galaxy']}</span></f:facet>
+                                        #{escuela.galaxia}
+                                    </h:column>
+                                    <h:column headerClass="uk-background-primary uk-width-small uk-text-center">
+                                        <f:facet name="header"><span class="letra-titulo ">#{administracion['title.all.tables.column.options']}</span></f:facet>
+                                        <h:outputText styleClass="uk-icon-button uk-text-center" pt:uk-icon="more-vertical"/>
+                                        <h:panelGroup layout="block" styleClass="uk-dropdown" pt:uk-dropdown="mode: click">
+                                            <ul class="uk-nav uk-dropdown-nav uk-text-left">
+                                                <li>
+                                                    <h:link styleClass="uk-text-primary" outcome="detalle">
+                                                        <h:outputText pt:uk-icon="icon:  file-text" styleClass="uk-margin-small-right uk-icon"/>
+                                                        <span class="uk-text-middle"><h:outputText value="#{otrosboton['detail']}" styleClass="primera-mayuscula uk-display-inline-block"/></span>
+                                                        <f:param name="escuela" value="#{escuela.claveCentroTrabajo}"/>
+                                                    </h:link>
+                                                </li>
+                                                <li>
+                                                    <h:commandLink styleClass="uk-text-primary" pt:uk-toggle="target: #modal-escuela">
+                                                        <h:outputText pt:uk-icon="icon: file-edit" styleClass="uk-margin-small-right uk-icon" />
+                                                        <span class="uk-text-middle"><h:outputText value="#{otrosboton['edit']}" styleClass="primera-mayuscula uk-display-inline-block"/></span>
+                                                        <f:setPropertyActionListener value="#{escuela}" target="#{escuelaDashboardControlador.escuelaBaseModelo}"/>
+                                                        <f:ajax render="formulario-escuela" onevent="function cierra(data) { abreModal('modal-escuela') }"/>
+                                                    </h:commandLink>
+                                                </li>
+                                                <li>
+                                                    <h:link styleClass="uk-text-primary" outcome="alumnos">
+                                                        <h:outputText pt:uk-icon="icon: users" styleClass="uk-margin-small-right uk-icon"/>
+                                                        <span class="uk-text-middle"><h:outputText value="alumnos" styleClass="primera-mayuscula uk-display-inline-block"/></span>
+                                                        <f:param name="escuela" value="#{escuela.claveCentroTrabajo}"/>
+                                                        <f:param name="nombre" value="#{escuela.nombre}"/>
+                                                    </h:link>
+                                                </li>
+                                                <li class="uk-nav-divider"/>
+                                                <li>
+                                                    <h:commandLink styleClass="uk-text-danger" pt:uk-toggle="target: #modal-eliminar">
+                                                        <h:outputText pt:uk-icon="icon: trash" styleClass="uk-margin-small-right uk-icon" />
+                                                        <span class="uk-text-middle"><h:outputText value="#{otrosboton['remove']}" styleClass="primera-mayuscula uk-display-inline-block"/></span>
+                                                        <f:setPropertyActionListener value="#{escuela}" target="#{escuelaDashboardControlador.escuelaBaseModelo}"/>
+                                                        <f:ajax render="formulario-eliminar" onevent="abreModal('modal-eliminar')"/>
+                                                    </h:commandLink>
+                                                </li>
+                                            </ul>
+                                        </h:panelGroup>
+                                    </h:column>
+                                    <f:facet name="footer">
+                                        <pa:pie-tabla htmlDataTable="#{escuelaDashboardControlador.htmlDataTable}"/>
+                                    </f:facet>
+                                </h:dataTable>
+                            </ui:fragment>
+                        </h:form>
+                    </div>
+                    <div class="uk-card-footer">
+                        <f:ajax render="formulario-tabla-escuela:tabla-escuela formulario-paginacion-escuela"
+                                onevent="limpiaSelect">
+                            <h:form id="formulario-paginacion-escuela">
+                                <div uk-grid="">
+                                    <div class="uk-panel uk-flex uk-flex-left uk-width-1-1@s uk-width-1-2@m">
+                                        <pa:boton htmlDataTable="#{escuelaDashboardControlador.htmlDataTable}"/>
+                                    </div>
+                                </div>
+                            </h:form>
+                        </f:ajax>
+                    </div>
+                </div>
+            </div>
+            <!-- /panel -->
+        </div>
+
+        <footer class="uk-section uk-section-small uk-text-center">
+        <hr/>
+            <p class="uk-text-small uk-text-center">Copyright 2019 - <a href="https://nahtechnology.com/">Creado por Nah Technology</a></p>
+        </footer>
+        <h:panelGroup layout="block" id="modal-escuela" styleClass="uk-modal-container" pt:uk-modal="">
+            <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <h:form id="formulario-escuela" styleClass="uk-form-stacked">
+                    <div class="uk-modal-header uk-background-secondary">
+                        <p class="uk-h4 uk-text-center uk-text-bold uk-text-capitalize">
+                            <h:outputText value="#{administracion['dashboard.modal.add.title']}" styleClass="letra-titulo" rendered="#{empty escuelaDashboardControlador.escuelaBaseModelo.claveCentroTrabajo}"/>
+                            <h:outputText value="#{administracion['dashboard.modal.update.title']}" styleClass="letra-titulo" rendered="#{not empty escuelaDashboardControlador.escuelaBaseModelo.claveCentroTrabajo}"/>
+                        </p>
+                    </div>
+                    <div class="uk-modal-body">
+                        <div uk-grid="">
+                            <div class="uk-width-1-1@s uk-width-1-6@m">
+                                <h:outputLabel styleClass="uk-form-label uk-text-uppercase" for="input-escuela-cct" value="#{administracion['dashboard.modal.cct']}"/>
+                                <div class="uk-form-controls">
+                                    <h:inputText styleClass="uk-input"
+                                                 id="input-escuela-cct"
+                                                 autocomplete="off"
+                                                 disabled="#{not empty escuelaDashboardControlador.escuelaBaseModelo.claveCentroTrabajo}"
+                                                 pt:placeholder="#{administracion['dashboard.modal.cct']}"
+                                                 value="#{escuelaDashboardControlador.escuelaBaseModelo.claveCentroTrabajo}"
+                                                 validator="#{escuelaValidacion.validate}">
+                                        <f:validateRequired/>
+                                        <f:validateLength minimum="10" maximum="14"/>
+                                    </h:inputText>
+                                </div>
+                                <h:message for="input-escuela-cct" errorClass="uk-text-danger uk-display-block primera-mayuscula"/>
+                            </div>
+                            <div class="uk-width-1-1@s uk-width-1-2@m">
+                                <h:outputLabel styleClass="uk-form-label uk-text-capitalize" for="input-escuela-nombre" value="#{administracion['dashboard.modal.name']}"/>
+                                <div class="uk-form-controls">
+                                    <h:inputText styleClass="uk-input"
+                                                 id="input-escuela-nombre"
+                                                 autocomplete="off"
+                                                 pt:placeholder="#{administracion['dashboard.modal.name']}"
+                                                 label="#{administracion['dashboard.modal.name']}"
+                                                 value="#{escuelaDashboardControlador.escuelaBaseModelo.nombre}">
+                                        <f:validateRequired/>
+                                        <f:validateLength minimum="4" maximum="70"/>
+                                    </h:inputText>
+                                </div>
+                                <h:message for="input-escuela-nombre" errorClass="uk-text-danger uk-display-block primera-mayuscula"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-modal-footer uk-flex uk-flex-right">
+                        <h:commandButton styleClass="uk-button uk-button-default uk-modal-close uk-margin-small-right" value="#{otrosboton['cancel']}">
+                            <f:ajax render="@form" onevent="function funcion(data) { limpiaSelect(data) }"/>
+                        </h:commandButton>
+                        <h:commandButton styleClass="uk-button uk-button-secondary" value="#{otrosboton['add']}" rendered="#{empty escuelaDashboardControlador.escuelaBaseModelo.claveCentroTrabajo}">
+                            <f:ajax execute="@form"
+                                    render="@form formulario-tabla-escuela formulario-paginacion-escuela formulario-filtrado-escuela"
+                                    listener="#{escuelaDashboardControlador.inserta}"
+                                    onevent="function fun(data) { cierraModal(data, 'modal-escuela'); limpiaSelect(data) }"/>
+                        </h:commandButton>
+                        <h:commandButton styleClass="uk-button uk-button-secondary" value="#{otrosboton['update']}" rendered="#{not empty escuelaDashboardControlador.escuelaBaseModelo.claveCentroTrabajo}">
+                            <f:ajax execute="@form"
+                                    render="@form formulario-tabla-escuela formulario-paginacion-escuela"
+                                    listener="#{escuelaDashboardControlador.actualiza}"
+                                    onevent="function actualizacion(data) { cierraModal(data, 'modal-escuela'); limpiaSelect(data) }"/>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup layout="block" id="modal-bloqueo" pt:uk-modal="">
+            <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <h:form id="formulario-bloqueo" styleClass="uk-form-stacked">
+                    <div class="uk-modal-header uk-background-secondary">
+                        <p class="uk-h4 uk-text-center uk-text-bold uk-text-capitalize">
+                            <h:outputFormat value="#{administracion['dashboard.modalbloqueo.title']}" styleClass="letra-titulo">
+                                <f:param value="#{escuelaDashboardControlador.escuelaBaseModelo.nombre}"/>
+                            </h:outputFormat>
+                        </p>
+                    </div>
+                    <div class="uk-modal-body">
+                        <div class="uk-margin">
+                            <h:outputLabel styleClass="uk-form-label uk-text-capitalize" value="#{administracion['catalogoadministrativo.administrator.bloc.catalog']}" for="seleccion-motivo-bloqueo"/>
+                            <div class="uk-form-controls">
+                                <h:selectOneMenu styleClass="uk-select"
+                                                 value="#{escuelaDashboardControlador.motivoBloqueoModelo.clave}"
+                                                 id="seleccion-motivo-bloqueo"
+                                                 label="#{administracion['dashboard.modal.colony']}">
+                                    <f:selectItems value="#{escuelaDashboardControlador.motivoBloqueoModeloLista}"
+                                                   var="motivoBloqueo"
+                                                   itemValue="#{motivoBloqueo.clave}"
+                                                   itemLabel="#{motivoBloqueo.valor}"/>
+                                    <f:validateRequired/>
+                                </h:selectOneMenu>
+                            </div>
+                            <h:message for="seleccion-motivo-bloqueo" errorClass="uk-text-danger uk-display-block primera-mayuscula"/>
+                        </div>
+                    </div>
+                    <div class="uk-modal-footer uk-flex uk-flex-right">
+                        <button class="uk-button uk-button-default uk-modal-close uk-margin-small-right" onclick="limpiaEntrada('modal-escuela')">#{otrosboton['cancel']}</button>
+                        <h:commandButton styleClass="uk-button uk-button-secondary" value="#{otrosboton['block']}">
+                            <f:ajax execute="@form"
+                                    render="formulario-tabla-escuela @form"
+                                    listener="#{escuelaDashboardControlador.bloquea}" onevent="function fun(data) { cierraModal(data, 'modal-bloqueo') }"/>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup layout="block" id="modal-eliminar" pt:uk-modal="">
+            <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <h:form id="formulario-eliminar" styleClass="uk-form-stacked">
+                    <div class="uk-modal-header fondo-peligro">
+                        <p class="uk-h4 uk-text-center uk-text-bold uk-text-capitalize">
+                            <h:outputFormat value="#{administracion['dashboard.modalremove.title']}" styleClass="letra-titulo">
+                                <f:param value="#{escuelaDashboardControlador.escuelaBaseModelo.claveCentroTrabajo}"/>
+                            </h:outputFormat>
+                        </p>
+                    </div>
+                    <div class="uk-modal-body">
+                        <h:outputFormat styleClass="primera-mayuscula uk-display-block" value="#{administracion['dashboard.modalremove.message']}">
+                            <f:param value="#{escuelaDashboardControlador.escuelaBaseModelo.nombre}"/>
+                        </h:outputFormat>
+
+                    </div>
+                    <div class="uk-modal-footer uk-flex uk-flex-right">
+                        <button class="uk-button uk-button-default uk-modal-close uk-margin-small-right" onclick="limpiaEntrada('modal-escuela')">#{otrosboton['cancel']}</button>
+                        <h:commandButton styleClass="uk-button uk-button-danger uk-modal-close" value="#{otrosboton['remove']}">
+                            <f:ajax execute="@form"
+                                    render="formulario-tabla-escuela formulario-paginacion-escuela formulario-filtrado-escuela"
+                                    onevent="function funcion(data) { limpiaSelect(data) }"
+                                    listener="#{escuelaDashboardControlador.elimina}"/>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+            </div>
+        </h:panelGroup>
+        <script type="text/javascript">
+            var modalEscuela = document.querySelector('#modal-escuela');
+            var modalMotivoBloqueo = document.querySelector('#modal-bloqueo');
+            var modalEliminar = document.querySelector('#modal-eliminar');
+
+            document.addEventListener('DOMContentLoaded', function() {
+                limpiaSelect();
+            });
+
+            function limpiaSelect(data) {
+                if (typeof data === 'undefined') {
+                    document.querySelectorAll('.uk-select').forEach(function (value) {
+                        value.removeAttribute('size');
+                    })
+                } else {
+                    if (data.status === 'success') {
+                        document.querySelectorAll('.uk-select').forEach(
+                            function (value) { value.removeAttribute('size'); }
+                        )
+                    }
+                }
+            }
+
+            function limpiaEntrada(modal) {
+                switch (modal) {
+                    case 'modal-escuela':
+                        modalEscuela.querySelectorAll('.uk-input').forEach(function (entrada) {
+                            entrada.value = '';
+                        });
+                        break;
+                    default:
+                        console.error('Opcion aun no programada:'.concat(modal));
+                }
+            }
+
+            function cierraModal(data, modal) {
+                if (data.status === "success") {
+                    switch (modal) {
+                        case 'modal-escuela':
+                            if (modalEscuela.querySelector('.uk-text-danger') === null) {
+                                UIkit.modal(modalEscuela).hide();
+                                limpiaEntrada(modal);
+                            }
+                            break;
+                        case 'modal-bloqueo':
+                            if (modalMotivoBloqueo.querySelector('.uk-text-danger') === null) {
+                                UIkit.modal(modalMotivoBloqueo).hide();
+                            }
+                            break;
+                        default:
+                            console.error('Opcion aun no programada:'.concat(modal));
+                    }
+                }
+            }
+
+            function abreModal(modal) {
+                switch (modal) {
+                    case 'modal-escuela':
+                        modalEscuela.querySelector('.uk-modal-header').click();
+                        break;
+                    case 'modal-bloqueo':
+                        var objecto = modalMotivoBloqueo.querySelector('.uk-form-label');
+                        objecto.click();
+                        break;
+                    case 'modal-eliminar':
+                        modalEliminar.querySelector('.uk-text-center').click();
+                        break;
+                    default:
+                        console.error('Opcion aun no programada:'.concat(modal));
+                }
+            }
+            function buscarLicenciasVencidas(nodo) {
+                let inputBusqueda = document.querySelector('[id$=filtrado]');
+                let ionoBusqueda = document.querySelector('[id$=comando-busqueda]');
+                inputBusqueda.value = nodo.innerText;
+                ionoBusqueda.click();
+            }
+        </script>
+    </ui:define>
+</ui:composition>
+</html>

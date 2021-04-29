@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<ui:composition template="/template/escolar/template-alumno.xhtml">
+    <ui:define name="hamburguesa">
+        <div class="color-nav uk-hidden@m">
+            <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar="">
+                <div class="">
+                    <a class="logo uk-logo" href="#">
+                        <h:graphicImage  url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/esquadron.svg"  alt="logo" title="logo" width="30px" height="30px" />
+                        <span class="lescuadron letra-logo uk-visible@m">squadron</span>
+                    </a>
+                </div>
+                <div class="uk-navbar-right ">
+                    <a class="uk-navbar-toggle" uk-navbar-toggle-icon="" href="" uk-toggle="target: #menu" type="button"/>
+                </div>
+                <div id="menu" uk-offcanvas="overlay: true">
+                    <div class="uk-offcanvas-bar  ">
+                        <button class="uk-offcanvas-close" type="button" uk-close=""/>
+                        <ul class="uk-thumbnav uk-thumbnav-vertical  uk-margin-large-top">
+                            <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right" class="uk-text-capitalize"><h:link outcome="dashboard" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg" width="40" alt=""/></h:link></li>
+                            <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right" class="uk-active"><h:link outcome="free-library" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg"  width="40" alt="" /></h:link></li>
+                        </ul>
+                        <div class="uk-text-center uk-display-block uk-margin-large-top">
+                            <a href="#" class="uk-text-small uk-display-block uk-text-center uk-text-capitalize" style="color: black;"  data-uk-icon="icon: triangle-down; ratio: 0.7">#{etiqueta['menu']}</a>
+                            <div class="uk-dropdown user-hamburguesa" data-uk-dropdown="mode: click; pos: bottom-center; animation: uk-animation-slide-bottom-small; duration: 150">
+                                <h:form>
+                                    <h:commandLink styleClass="uk-text-capitalize  " style="font-size: 12px;" action="#{alumnoControlador.cerrarSesion()}" value="#{etiqueta['close.sesion']}"/>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="barra-nav"></div>
+        </div>
+    </ui:define>
+    <ui:define name="menu">
+        <div class="left-content-box  content-box-dark">
+            <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/avatar/astronauta-nino.svg" alt="niño" class="profile-img" rendered="#{alumnoControlador.alumnoModelo.sexo eq 'm'}"/>
+            <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/avatar/astronauta-nina.svg" alt="niña" class="profile-img" rendered="#{alumnoControlador.alumnoModelo.sexo eq 'f'}"/>
+            <h6 class="uk-text-center uk-margin-remove-vertical text-light nombre-usuario">#{alumnoControlador.alumnoModelo.apodo} </h6>
+            <div class="uk-position-relative uk-text-center uk-display-block">
+                <a href="#" class="uk-text-small uk-text-muted uk-display-block uk-text-center uk-text-capitalize" data-uk-icon="icon: triangle-down; ratio: 0.7">#{etiqueta['menu']}</a>
+                <div class="uk-dropdown user-drop" data-uk-dropdown="mode: click; pos: bottom-center; animation: uk-animation-slide-bottom-small; duration: 150">
+
+                    <h:form>
+                        <h:commandLink styleClass="uk-text-capitalize" action="#{alumnoControlador.cerrarSesion()}" value="#{etiqueta['close.sesion']}"/>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+        <div class="left-nav-wrap  uk-visible@xl ">
+            <ul class="uk-thumbnav uk-thumbnav-vertical uk-position-center uk-margin-large-top">
+                <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right" class="uk-text-capitalize"><h:link outcome="dashboard" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg" width="70" alt=""/></h:link></li>
+                <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right" class="uk-active"><h:link outcome="free-library" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg"  width="70" alt="" /></h:link></li>
+            </ul>
+        </div>
+        <div class="left-nav-wrap uk-hidden@xl ">
+            <ul class="uk-thumbnav uk-thumbnav-vertical uk-position-center uk-margin-small-top">
+                <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right" ><h:link outcome="dashboard" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg"  width="60" alt=""/></h:link></li>
+                <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right" class="uk-active"><h:link outcome="free-library"><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg"  width="60" alt=""/></h:link></li>
+            </ul>
+        </div>
+    </ui:define>
+    <ui:define name="contenido">
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/alumno/transcript/variables-alumno.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/alumno/transcript/transcript.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/alumno/transcript/transcript-drag.css"/>
+        <div class="uk-section" style="box-sizing: border-box">
+            <div class="uk-container padding-contenedor">
+                <div class="uk-inline uk-flex uk-flex-left uk-text-bold">
+                    <a><h:graphicImage styleClass="img-ayuda" url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/icono/information.svg" pt:uk-svg=""/></a>
+                    <div uk-dropdown="mode: click">Watch the video and fill in the blanks</div>
+                </div>
+                <div class="video-activity uk-position-relative">
+                    <div data-video="#{alumnoControlador.actividadModeloBibliotecaLibre.idVideo}" class="scrollFinal"></div>
+                    <div class="barra-publicidad"></div>
+                    <span  uk-icon="icon: youtube; ratio: 4" class="visibilidad"/>
+                </div>
+                <h:panelGroup layout="block" styleClass="uk-child-width-1-2@m uk-grid" pt:uk-grid="">
+                    <h:panelGroup layout="block" styleClass="contenedor-padre-activity" >
+                        <h:panelGroup layout="block" styleClass="uk-sortable contenedor-respuesta" pt:uk-sortable="group: respuesta" pt:cls-no-drag="uk-sortable-nodrag"/>
+                    </h:panelGroup>
+                    <div id="scrollTranscript" class="trancript-contenedor arrastrar scroll-drag uk-text-justify remplazar" >
+                        <h:outputText value="#{actividadBibliotecaLibre.transcripcion}" escape="false" />
+                    </div>
+                </h:panelGroup>
+                    <div class="uk-flex uk-flex-center uk-margin-small-bottom">
+                        <button  class="boton-enviar ">SCORE</button>
+                    </div>
+                <div class="uk-flex uk-flex-center">
+                    <h:button value="#{boton['next']}" styleClass="boton-enviar " outcome="siguiente"/>
+                </div>
+
+            </div>
+        </div>
+        <script type="application/javascript">
+            var videoPlayer = document.querySelectorAll('.scrollFinal');
+            var player;
+            var totalRespuestasTranscripcion = 0;
+            var timer_is_on = 0;
+            var time;
+            var objDiv = document.getElementById('scrollTranscript');
+            var ordenarPalabras = document.querySelector('.order-words');
+            var mensajeRestriccion = "#{alumno['title.description.full.request']}";
+            var tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            document.querySelector('.video-activity  > span').addEventListener('click',reproducir);
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            function onYouTubeIframeAPIReady() {
+                videoPlayer.forEach(function (video) {
+                    console.log(video.dataset.video);
+                    player = new YT.Player( video, {
+                        height: '100%',
+                        width: '100%',
+                        videoId: video.dataset.video,
+                        events: {
+                            'onReady': onPlayerReady,
+                            'onStateChange': onPlayerStateChange
+                        }
+                    });
+                });
+            }
+
+            function onPlayerReady(event) {
+                console.log(event, 'Evento Listo!!');
+            }
+
+            var done = false;
+            function onPlayerStateChange(event) {
+                switch (event.data) {
+                    case 0: {
+                        var contenedorVideo = document.querySelector('.scrollFinal');
+                        var logo = document.querySelector('.video-activity  > span');
+                        var barra = document.querySelector('.barra-publicidad');
+                        console.log('finalizado');
+                        contenedorVideo.style.display = 'none';
+                        contenedorVideo.parentElement.classList.add('finalVideo');
+                        logo.classList.toggle('visibilidad');
+                        barra.classList.toggle('visibilidad');
+
+                        break;
+                    }
+                    case 1: {
+                        console.log("reproduciendo");
+
+                        break;
+                    }
+                    case 2: {
+                        console.log("pausado");
+                        break;
+                    }
+                }
+            }
+
+            function reproducir(event) {
+                        var contenedorVideo =  document.querySelector('.scrollFinal');
+                        var logo = document.querySelector('.video-activity > span');
+                        var barra = document.querySelector('.barra-publicidad');
+                        contenedorVideo.style.display = 'block';
+                        contenedorVideo.parentElement.classList.remove('finalVideo');
+                        logo.classList.toggle('visibilidad');
+                        barra.classList.toggle('visibilidad');
+                        player.playVideo();
+            }
+        </script>
+        <script type="application/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/alumno/activity-free-library.js" ></script>
+    </ui:define>
+    <ui:define name="enlaces-js">
+        <script type="application/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/alumno/drag-prueba.js"></script>
+    </ui:define>
+</ui:composition>
+</html>

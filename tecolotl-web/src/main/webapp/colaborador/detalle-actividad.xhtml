@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        class="js">
+
+<h:head>
+    <title>Dashboard</title>
+     <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/uikit.css"/>
+     <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/tablas.css"/>
+     <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/colaborador/detalle-actividad.css"/>
+     <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/colaborador/glosario.css"/>
+</h:head>
+
+<f:metadata>
+    <f:viewParam name="video" value="#{relacionarGlosarioActividad.idActividad}"/>
+    <f:viewParam name="video" value="#{detalleActividadControlador.video}"/>
+</f:metadata>
+
+<h:body>
+    <div class="uk-container uk-margin-medium-top">
+        <h:panelGroup layout="block" styleClass="uk-child-width-1-2@m uk-grid" pt:uk-grid="">
+            <div>
+                <div class="uk-card uk-card-default uk-card-small uk-card-body">
+                    <h3 class="uk-card-title">Small</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+
+                </div>
+            </div>
+            <div>
+                <div class="uk-card uk-card-default uk-card-small uk-card-body">
+                    <h3 class="uk-card-title">Small</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+            </div>
+            <div>
+                <div class="uk-card uk-card-default uk-card-small uk-card-body">
+                    <h3 class="uk-card-title">Glosario</h3>
+                    <ui:fragment rendered="#{empty detalleActividadControlador.glosarioModeloLista}">
+                        <table class="uk-table uk-table-middle">
+                            <thead class="uk-background-primary letra-titulo ">
+                            <tr>
+                                <th><span class="letra-titulo  uk-text-bold uk-text-center">ID imagen</span></th>
+                                <th><span class="letra-titulo uk-text-bold uk-text-center ">Significado</span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="uk-flex uk-flex-center">
+                                        <h:graphicImage library="img" name="vacio.svg" height="auto" width="auto" alt="vacio"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </ui:fragment>
+
+                    <h:dataTable id="tabla-glosario"
+                                 value="#{detalleActividadControlador.glosarioModeloLista}"
+                                 rendered="#{not empty detalleActividadControlador.glosarioModeloLista}"
+                                 var="glosario"
+                                 styleClass="uk-table uk-table-justify uk-text-center uk-table-striped tabla-borde letra-contenido-tabla opcion"
+                                 columnClasses=""
+                                 headerClass="uk-background-primary letra-titulo uk-text-bold uk-text-center">
+                        <h:column>
+                            <f:facet name="header">ID imagen</f:facet>
+                            #{glosario.palabra}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Significado</f:facet>
+                            #{glosario.significado}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Clase</f:facet>
+                            #{glosario.claseGlosarioModelo.valor}
+                        </h:column>
+                    </h:dataTable>
+                    <button class="uk-button uk-button-small uk-button-primary" uk-toggle="target: #modal-glosario">Agregar</button>
+                    <button class="uk-button uk-button-small uk-button-primary" uk-toggle="target: #modal-relacionar-glosario">Existente</button>
+                </div>
+            </div>
+            <div>
+                <div class="uk-card uk-card-default uk-card-small uk-card-body">
+                    <h3 class="uk-card-title">Small</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+            </div>
+
+        </h:panelGroup>
+
+    </div>
+
+    <h:panelGroup layout="block" id="modal-glosario" pt:uk-modal="">
+        <div class="uk-modal-dialog">
+            <button class="uk-modal-close-default" type="button" uk-close="">
+
+            </button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Nuevo Glosario</h2>
+            </div>
+                <h:form styleClass="uk-form-stacked">
+                    <div class="uk-modal-body " uk-grid="" >
+<!--                        <h:panelGroup layout="block" styleClass="uk-grid" pt:uk-grid="">-->
+
+                           <div class="uk-width-1-2">
+                               <div class="margen-imagen-cargar">
+                                   <h:inputFile   id="file-glosario" styleClass="inputfile inputfile-glosario" pt:data-multiple-caption="{count} files selected"  value="#{detalleActividadControlador.glosarioModelo.imagen}" />
+                                   <h:outputLabel for="file-glosario"><span/><strong>Cargar..</strong></h:outputLabel>
+                                   <p id="demo"/>
+
+                               </div>
+                           </div>
+                            <div class="uk-width-1-2">
+                                <label class="uk-form-label" for="form-ClaseGlosario">Clase Glosario</label>
+                                <div class="uk-form-controls">
+                                    <h:selectOneMenu styleClass="uk-select uk-form-width-medium" id="form-ClaseGlosario" value="#{detalleActividadControlador.glosarioModelo.claseGlosarioModelo.clave}">
+                                        <f:selectItems
+                                                value="#{detalleActividadControlador.claseGlosarioModeloLista}"
+                                                        var="claseLista"
+                                                        itemLabel="#{claseLista.valor}"
+                                                        itemValue="#{claseLista.clave}"/>
+                                        <f:validateRequired/>
+                                    </h:selectOneMenu>
+                                </div>
+                            </div>
+                            <div class="uk-width-1-1">
+                                <label class="uk-form-label" for="form-Palabra">Palabra</label>
+                                <div class="uk-form-controls">
+                                    <h:inputText styleClass="uk-input" id="form-Palabra" value="#{detalleActividadControlador.glosarioModelo.palabra}">
+                                        <f:validateRequired/>
+                                        <f:validateLength minimum="2" maximum="20"/>
+                                    </h:inputText>
+                                </div>
+                            </div>
+                            <div class="uk-width-1-1">
+                                <div class="uk-margin">
+                                    <label class="uk-form-label" for="form-significado">Significado</label>
+                                    <div class="uk-form-controls">
+                                        <h:inputTextarea styleClass="uk-textarea" rows="5" id="form-significado" pt:placeholder="Signicado"  value="#{detalleActividadControlador.glosarioModelo.significado}">
+                                            <f:validateRequired/>
+                                            <f:validateLength maximum="300"/>
+                                        </h:inputTextarea>
+                                    </div>
+                                </div>
+                            </div>
+
+<!--                        </h:panelGroup>-->
+                    </div>
+                    <div class="uk-modal-footer">
+                        <h:commandButton styleClass="uk-button uk-button-primary" value="Agregar" >
+                            <f:ajax execute="@form" listener="#{detalleActividadControlador.agregaGlosario}" render="@form"/>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+
+        </div>
+    </h:panelGroup>
+    <h:panelGroup layout="block" id="modal-relacionar-glosario"  pt:uk-modal="">
+        <div class="uk-modal-dialog">
+            <button class="uk-modal-close-default" type="button" uk-close=""/>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Nuevo Glosario</h2>
+            </div>
+            <h:form styleClass="uk-form-stacked" id="formulario-relacionar-glosario">
+                <div class="uk-modal-body">
+                    <h:panelGroup layout="block" styleClass="uk-grid" pt:uk-grid="">
+                        <div class="uk-width-2-3">
+                            <h:outputLabel value="Palabra" for="glosario-palabra"/>
+                            <div class="uk-form-controls">
+                                <h:inputText id="glosario-palabra"
+                                             value="#{relacionarGlosarioActividad.palabra}"
+                                             styleClass="uk-input">
+                                    <f:validateRequired/>
+                                    <f:validateLength minimum="1" maximum="20"/>
+                                </h:inputText>
+                            </div>
+                        </div>
+                        <div class="uk-width-1-3 uk-flex uk-flex-bottom">
+                            <h:commandButton styleClass="uk-button uk-button-secondary" value="Buscar">
+                                <f:ajax execute="@form"
+                                        render="@form"
+                                        listener="#{relacionarGlosarioActividad.busca}"/>
+                            </h:commandButton>
+                        </div>
+                        <div class="uk-width-1-1">
+                            <ui:fragment rendered="#{empty relacionarGlosarioActividad.glosarioModeloLista}">
+                                <table class="uk-table uk-table-middle">
+                                    <thead class="uk-background-primary letra-titulo ">
+                                    <tr>
+                                        <th><span class="letra-titulo  uk-text-bold uk-text-center">Palabra</span></th>
+                                        <th><span class="letra-titulo uk-text-bold uk-text-center ">Clase Palabra</span></th>
+                                        <th><span class="letra-titulo uk-text-bold uk-text-center ">Significado</span></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="uk-flex uk-flex-center">
+                                                <h:graphicImage library="img" name="vacio.svg" height="auto" width="auto" alt="vacio"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </ui:fragment>
+                            <h:dataTable id="tabla-glosario-relacionar"
+                                         value="#{relacionarGlosarioActividad.glosarioModeloLista}"
+                                         var="glosario"
+                                         rendered="#{not empty relacionarGlosarioActividad.glosarioModeloLista}">
+                                <h:column>
+                                    <f:facet name="header">Palabra</f:facet>#{glosario.palabra}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Clase Glosario</f:facet>#{glosario.claseGlosarioModelo.valor}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Significado</f:facet>#{glosario.significado}
+                                </h:column>
+                            </h:dataTable>
+                        </div>
+                    </h:panelGroup>
+                </div>
+                <div class="uk-modal-footer">
+                    <h:commandButton styleClass="uk-button uk-button-primary" value="Agregar">
+                        <f:ajax/>
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </div>
+    </h:panelGroup>
+    <script type="application/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/uikit.js"/>
+    <h:outputScript library="js" name="uikit-icons.js"/>
+<!--    <h:outputScript library="js" name="colaborador/tam-archivo.js"/>-->
+    <h:outputScript library="js" name="/colaborador/custom-file-input.js"/>
+
+
+</h:body>
+</html>

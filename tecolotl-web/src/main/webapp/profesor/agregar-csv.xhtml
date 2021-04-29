@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:composition template="/template/profesor/dashboard-profesor.xhtml">
+    <ui:define name="menu">
+
+            <ul class="uk-subnav nav-sub uk-visible@m " uk-margin="">
+                <li><h:link outcome="dashboard" value="#{etiqueta['home']}"/></li>
+                <li><h:link outcome="regresar" value="Student Administration"/></li>
+                <li><span>#{profesor['agregarcsv.title']}</span></li>
+            </ul>
+
+        <div>
+            <h:form><h:commandLink action="#{profesorControlador.cerrarSesion}" onclick=" limpiarSession()" value="#{etiqueta['close.sesion']}"/></h:form>
+        </div>
+        <div class="uk-navbar-left uk-hidden@m">
+            <a class="uk-navbar-toggle" uk-navbar-toggle-icon="" href="" uk-toggle="target: #menu" type="button"/>
+        </div>
+        <div id="menu" uk-offcanvas="overlay: true">
+            <div class="uk-offcanvas-bar  ">
+                <button class="uk-offcanvas-close" type="button" uk-close=""/>
+                <ul class="uk-nav  nav-sub-offcanvas ">
+                    <li ><h:link outcome="regresar" value="Home" styleClass="letra-color-subnav"/></li>
+                </ul>
+            </div>
+        </div>
+
+    </ui:define>
+    <ui:define name="contenido">
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/profesor/csv-alumnos.css"/>
+        <div class="uk-margin-large-top"><h1 class="uk-margin-top lescuadron primera-mayuscula">#{profesor['agregarcsv.title']}</h1></div>
+        <div class="uk-grid" uk-grid="">
+            <div class="uk-width-1-3@m">
+                <div class="uk-card uk-card-default uk-card-small color-card-six margen-one">
+                    <div class="uk-card-header barder-card">
+                        <div class="uk-grid-small uk-flex-middle" uk-grid="">
+                            <div class="uk-width-auto">
+                                <img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/avatar/maestro.svg" alt="maestro" style="border-radius: 150px" width="50" height="50"/>
+                            </div>
+                            <div class="uk-width-expand">
+                                <h3 class="uk-card-title uk-margin-remove-bottom uk-text-small uk-text-bold">
+                                    #{profesorControlador.profesorModelo.nombre.concat(' ').concat(profesorControlador.profesorModelo.apellidoPaterno).concat(' ').concat(profesorControlador.profesorModelo.apellidoMaterno)}
+                                </h3>
+                                <p class="uk-text-meta uk-margin-remove-top uk-text-small"><span>#{profesorControlador.profesorModelo.apodo}</span></p>
+                            </div>
+                            <div class="uk-width-1-1@s">
+                                <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small uk-margin-small-bottom "><span class="uk-text-bold">#{etiqueta['logging.nickname']}: </span>#{profesorControlador.profesorModelo.apodo}</p>
+                                <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small uk-margin-small-bottom "><span class="uk-text-bold">#{etiqueta['correo.electronico']}: </span>#{profesorControlador.profesorModelo.correoEletronico}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card-body padding-card-body">
+                        <h3 class="uk-text-uppercase uk-text-bold ">#{profesor['dashboard.group']}</h3>
+                        <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small uk-margin-small-bottom "><span class="uk-text-bold">#{profesor['dashboard.table.schoolgrade']}: </span>#{profesorGrupoControlador.grupoModelo.grado}</p>
+                        <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small uk-margin-small-bottom "><span class="uk-text-bold">#{profesor['dashboard.group']}: </span>#{profesorGrupoControlador.grupoModelo.grupo}</p>
+                    </div>
+                </div>
+            </div>
+            <h:panelGroup layout="block" styleClass="botones uk-width-2-3@m">
+                <div>
+                    <div class="titulo-section uk-text-center uk-text-bold uk-text-capitalize">#{profesor['agregarcsv.file.select']}</div>
+                    <label for="archivo"><span>#{profesor['agregarcsv.file']} ...</span></label>
+                    <input id="archivo" type="file" style="display: none"/>
+                </div>
+                <h:panelGroup layout="block" id="cupo-alumnos">
+                    <div class="titulo-section uk-text-center uk-text-bold uk-text-capitalize">#{profesor['agregarscv.student']}</div>
+                    <progress max="${agregarCsvControlador.totalAlumno}" value="${agregarCsvControlador.alumnosAsignado}"/>
+                    <span><h:outputText id="numero-alumnos" value="${agregarCsvControlador.alumnosAsignado}/${agregarCsvControlador.totalAlumno}"/> </span>
+                </h:panelGroup>
+                <div class="uk-margin-medium-top">
+                    <h:button styleClass="boton-maestro-base" value="#{boton['back']}" outcome="regresar"/>
+                    <button uk-toggle="target: #modal-nuevo-alumno" class="boton-escuadron-base agregar">#{profesor['agregarscv.add.student']}</button>
+                    <h:form>
+                        <h:commandButton id="apodos-ver" styleClass="boton-escuadron-base" value="#{boton['clean']}">
+                            <f:ajax  listener="#{agregarCsvControlador.actualizar}"
+                                     render="apodos-filas"
+                                     onevent="function apodosBase(data) { if (data.status === 'success') { limpiar() } }"/>
+                        </h:commandButton>
+                    </h:form>
+                </div>
+            </h:panelGroup>
+        </div>
+        <h:panelGroup styleClass="uk-flex uk-flex-center uk-flex-wrap" >
+            <div class="uk-overflow-auto uk-margin-large-top">
+                <div class="titulo-section uk-text-center uk-text-bold uk-text-capitalize">#{profesor['agregarscv.student.correct']}</div>
+                <table id="tabla-aceptados" class="uk-table uk-table-justify uk-table-small uk-table-middle tablaPrimaria uk-table-hover uk-text-center">
+                    <thead class="thPrimario">
+                    <tr class="">
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.nickname']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.name']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.surname']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.surname2']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.birthdate']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.languaje']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.sex']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{etiqueta['options']}</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="8">
+                            <img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/vacio.svg" alt="vacio" width="280px" height="280px"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <ui:remove>
+                    <div class="uk-flex uk-flex-right">
+                        <button class="boton-escuadron-base">#{boton['submit']}</button>
+                    </div>
+                </ui:remove>
+            </div>
+            <div class="uk-overflow-auto uk-margin-large-top uk-margin-large-bottom">
+                <div class="titulo-section uk-text-center uk-text-bold uk-text-capitalize">#{profesor['agregarscv.student.not.correct']}</div>
+                <table id="tabla-rechazados" class="uk-table uk-table-justify uk-table-small uk-table-middle tablaPrimaria uk-table-hover uk-text-center" >
+                    <thead class="thPrimario">
+                    <tr>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.nickname']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.name']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.surname']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.surname2']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.birthdate']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.languaje']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.student.sex']}</span></th>
+                        <th class="uk-text-center"><span class="letra-tabla uk-text-bold">#{profesor['agregarscv.validate']}</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="8">
+                                <img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/vacio.svg" alt="vacio" width="280px" height="280px"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup layout="block" id="apodos-filas" style="display: none">
+            <ul id="apodos">
+                    <ui:repeat value="#{agregarCsvControlador.apodos}" var="apodo">
+                        <li>${apodo}</li>
+                    </ui:repeat>
+            </ul>
+        </h:panelGroup>
+        <h:form id="formulario-alumno">
+            <h:inputHidden id="apodo" value="#{agregarCsvControlador.alumnoModelo.apodo}"/>
+            <h:inputHidden id="nombre" value="#{agregarCsvControlador.alumnoModelo.nombre}"/>
+            <h:inputHidden id="apellido-paterno" value="#{agregarCsvControlador.alumnoModelo.apellidoPaterno}"/>
+            <h:inputHidden id="apellido-materno" value="#{agregarCsvControlador.alumnoModelo.apellidoMaterno}"/>
+            <h:inputHidden id="fecha-nacimiento" value="#{agregarCsvControlador.alumnoModelo.nacimiento}">
+                <f:convertDateTime pattern="dd/MM/yyyy"/>
+            </h:inputHidden>
+            <h:inputHidden id="sexo" value="#{agregarCsvControlador.alumnoModelo.sexo}"/>
+            <h:inputHidden id="nivel-lenguaje" value="#{agregarCsvControlador.alumnoModelo.nivelLenguajeModelo.clave}"/>
+            <h:inputHidden id="contrasenia" value="#{agregarCsvControlador.alumnoModelo.contrasenia}">
+                <f:converter converterId="tecolotl.web.ContraseniaConvertidor"/>
+            </h:inputHidden>
+            <h:commandButton id="enviar" style="display: none">
+                <f:ajax execute="@form" listener="#{agregarCsvControlador.inserta}"
+                render="cupo-alumnos apodos-filas" />
+            </h:commandButton>
+        </h:form>
+        <!--  Modal nuevo alumno  -->
+        <h:panelGroup layout="block" id="modal-nuevo-alumno" styleClass="uk-modal-container" pt:uk-modal="">
+            <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <h:form id="formulario-modal-nuevo-profesor" styleClass="uk-form-stacked">
+                    <button class="uk-modal-close-default" type="button" uk-close=""/>
+                    <div class="uk-modal-header header-color-card">
+                        <h2 class="uk-modal-title titulo-modal uk-text-capitalize">#{profesor['agregarcsv.title']}</h2>
+                    </div>
+                    <div class="barra-modal"></div>
+                    <div class="uk-modal-body">
+                        <div class="uk-margin">
+                            <div class="uk-grid-small uk-flex-center uk-grid" uk-grid="">
+                                <div class="uk-width-1-1@s uk-width-1-5@m ">
+                                    <h:outputLabel for="input-nick" styleClass="uk-text-capitalize uk-form-label" value="#{profesor['agregarscv.student.nickname']}"/>
+                                    <div class="uk-form-controls">
+                                        <h:inputText styleClass="uk-input"
+                                                     id="input-nick"
+                                                     autocomplete="off"
+                                                     binding="#{agregarCsvControlador.uiInputApodo}"
+                                                     pt:placeholder="#{etiqueta['write.text']}"
+                                                     label="#{profesor['agregarscv.student.nickname']}"
+                                                     value="#{agregarCsvControlador.alumnoModelo.apodo}">
+                                            <f:validateRequired/>
+                                            <f:validateLength minimum="4" maximum="40"/>
+                                        </h:inputText>
+                                    </div>
+                                    <h:message for="input-nick" styleClass="uk-alert-danger"/>
+                                </div>
+                                <div class="uk-width-1-1@s uk-width-1-5@m  ">
+                                    <h:outputLabel for="input-name" styleClass=" uk-text-capitalize uk-form-label" value="#{profesor['agregarscv.student.name']}"/>
+                                    <div class="uk-form-controls">
+                                        <h:inputText styleClass="uk-input"
+                                                     id="input-name"
+                                                     autocomplete="off"
+                                                     pt:placeholder="#{etiqueta['write.text']}"
+                                                     label="#{profesor['agregarscv.student.name']}"
+                                                     value="#{agregarCsvControlador.alumnoModelo.nombre}">
+                                            <f:validateRequired/>
+                                            <f:validateLength minimum="3" maximum="40"/>
+                                        </h:inputText>
+                                    </div>
+                                    <h:message for="input-name" styleClass="uk-alert-danger"/>
+                                </div>
+                                <div class="uk-width-1-1@s uk-width-1-5@m">
+                                    <h:outputLabel for="input-apellidop" styleClass=" uk-text-capitalize uk-form-label" value="#{profesor['agregarscv.student.surname']}"/>
+                                    <div class="uk-form-controls">
+                                        <h:inputText styleClass="uk-input"
+                                                     id="input-apellidop"
+                                                     autocomplete="off"
+                                                     pt:placeholder="#{etiqueta['write.text']}"
+                                                     label="#{profesor['agregarscv.student.surname']}"
+                                                     value="#{agregarCsvControlador.alumnoModelo.apellidoPaterno}">
+                                            <f:validateRequired/>
+                                            <f:validateLength minimum="4" maximum="50"/>
+                                        </h:inputText>
+                                    </div>
+                                    <h:message for="input-apellidop" styleClass="uk-alert-danger"/>
+                                </div>
+                                <div class="uk-width-1-1@s uk-width-1-5@m">
+                                    <h:outputLabel for="input-apellidom" styleClass=" uk-text-capitalize uk-form-label" value="#{profesor['agregarscv.student.surname2']}"/>
+                                    <div class="uk-form-controls">
+                                        <h:inputText styleClass="uk-input"
+                                                     id="input-apellidom"
+                                                     autocomplete="off"
+                                                     pt:placeholder="#{etiqueta['write.text']}"
+                                                     label="#{profesor['agregarscv.student.surname2']}"
+                                                     value="#{agregarCsvControlador.alumnoModelo.apellidoMaterno}">
+                                            <f:validateRequired/>
+                                            <f:validateLength minimum="4" maximum="50"/>
+                                        </h:inputText>
+                                    </div>
+                                    <h:message for="input-apellidom" styleClass="uk-alert-danger"/>
+                                </div>
+                                <div class="uk-width-1-1@s uk-width-1-6@s">
+                                    <h:outputLabel for="input-fecha-nacimiento" styleClass=" uk-text-capitalize uk-form-label" value="#{profesor['agregarscv.student.birthdate']}"/>
+                                    <div class="uk-form-controls">
+                                        <h:inputText styleClass="uk-input"
+                                                     id="input-fecha-nacimiento"
+                                                     autocomplete="off"
+                                                     pt:placeholder="dd/mm/yyyy"
+                                                     pt:oninput="entradaFecha(event)"
+                                                     label="#{profesor['agregarscv.student.birthdate']}"
+                                                     value="#{agregarCsvControlador.alumnoModelo.nacimiento}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            <f:validator validatorId="tecolotl.web.profesor.FechaFutura"/>
+                                            <f:validateRequired/>
+                                        </h:inputText>
+                                    </div>
+                                    <h:message for="input-fecha-nacimiento" styleClass="uk-alert-danger"/>
+                                </div>
+
+                                <div class="uk-width-1-1@s uk-width-1-5@m">
+                                    <h:outputLabel for="seleccion-nivel-lenguaje" styleClass="uk-text-capitalize uk-form-label" value="#{profesor['agregarscv.student.languaje']}"/>
+                                    <div class="uk-form-controls">
+                                        <h:selectOneMenu id="seleccion-nivel-lenguaje"
+                                                         styleClass="selector"
+                                                         value="#{agregarCsvControlador.alumnoModelo.nivelLenguajeModelo.clave}">
+                                            <f:selectItem itemValue="#{null}" itemLabel="#{etiqueta['select']}" noSelectionOption="true"/>
+                                            <f:selectItems value="#{agregarCsvControlador.nivelLenguajeModeloLista}"
+                                                           var="nivelLenguaje"
+                                                           itemLabel="#{nivelLenguaje.valor}"
+                                                           itemValue="#{nivelLenguaje.clave}"/>
+                                            <f:validateRequired/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <h:message for="seleccion-nivel-lenguaje" styleClass="uk-alert-danger"/>
+                                </div>
+                                <div class="uk-width-1-1@s uk-width-1-5@m">
+                                    <h:outputLabel for="seleccion-sexo" styleClass="uk-text-capitalize uk-form-label" value="#{profesor['agregarscv.student.sex']}"/>
+                                    <div class="uk-form-controls">
+                                        <h:selectOneMenu id="seleccion-sexo"
+                                                         styleClass="selector"
+                                                         value="#{agregarCsvControlador.alumnoModelo.sexo}">
+                                            <f:selectItem itemValue="#{null}" itemLabel="#{etiqueta['select']}" noSelectionOption="true"/>
+                                            <f:selectItem itemValue="m" itemLabel="#{profesor['agregarscv.sex.m']}"/>
+                                            <f:selectItem itemValue="f" itemLabel="#{profesor['agregarscv.sex.f']}"/>
+                                            <f:validateRequired/>
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <h:message for="seleccion-sexo" styleClass="uk-alert-danger"/>
+                                </div>
+                                <div class="uk-width-1-1@s uk-width-1-5@m">
+                                    <span>#{profesor['agregarscv.student']}</span>
+                                    <div class="uk-form-controls">
+                                        <progress max="${agregarCsvControlador.totalAlumno}" value="${agregarCsvControlador.alumnosAsignado}"/>
+                                        <span>${agregarCsvControlador.alumnosAsignado}/${agregarCsvControlador.totalAlumno}</span>
+                                    </div>
+                                </div>
+                                <div id="imagenes" class="uk-width-1-1@s">
+                                    <c:forEach begin="1" end="28" var="indice">
+                                        <img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/iconos-login/${indice}.svg" onclick="cambioImagen(event)" alt=""/>
+                                    </c:forEach>
+                                    <h:inputHidden id="input-secret-password"
+                                                   value="#{agregarCsvControlador.alumnoModelo.contrasenia}">
+                                        <f:validateRequired/>
+                                        <f:converter converterId="tecolotl.web.ContraseniaConvertidor"/>
+                                    </h:inputHidden>
+                                </div>
+                                <h:message for="input-secret-password" styleClass="uk-alert-danger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button class="boton-escuadron-base-secundary uk-modal-close" type="reset" onclick="resetContrasena()">#{boton['cancel']}</button>
+                        <h:commandButton value="#{boton['add']}" onclick="cargaContrasenia()"
+                                         styleClass="boton-escuadron-base uk-margin-left">
+                            <f:ajax listener="#{agregarCsvControlador.inserta}"
+                                    onevent="function funcion(data) { cierraModal(data); }"
+                                    execute="@form"
+                                    render="@form cupo-alumnos"/>
+                        </h:commandButton>
+                    </div>
+                </h:form>
+            </div>
+        </h:panelGroup>
+    </ui:define>
+
+
+    <ui:define name="file-js">
+        <script type="application/javascript">
+            var apodoAlum = "#{profesor['csv.nickname']}";
+            var dateAlum = "#{profesor['csv.date']}";
+            var levelAlum = "#{profesor['csv.level']}";
+            var genderAlum = "#{profesor['csv.gender']}";
+        </script>
+        <script type="text/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/nah.js"></script>
+        <script type="text/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/profesor/agregar-alumnos-csv.js"></script>
+        <script type="text/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/profesor/agregar-alumno-modal.js"></script>
+    </ui:define>
+</ui:composition>
+</html>

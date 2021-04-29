@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: Jesus
+  Date: 26/08/2019
+  Time: 03:27 p. m.
+-->
+<!DOCTYPE html
+        PUBLIC
+        "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Actividades</title>
+     <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/uikit.css"/>
+     <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/tablas.css"/>
+     <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/colaborador/actividad.css"/>
+
+</h:head>
+
+<h:body>
+
+        <div class="uk-container uk-container-small uk-margin-medium-top">
+
+            <div class="uk-card uk-card-default">
+                <div class="uk-card-header">
+                    <div class="uk-grid-small uk-flex-middle" uk-grid="">
+                        <div class="uk-width-auto">
+                        </div>
+                        <div class="uk-width-expand">
+                            <h3 class="uk-card-title uk-margin-remove-bottom">Lista de Actividades</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="uk-card-body uk-overflow-auto">
+                    <h:dataTable id="tabla-actividades"
+                                 value="#{colaboradorDashboardControlador.collectionDataModel}"
+                                 var="actividad"
+                                 styleClass="uk-table uk-table-justify uk-text-center uk-table-striped tabla-borde letra-contenido-tabla opcion"
+                                 columnClasses=""
+                                 headerClass="uk-background-primary letra-titulo uk-text-bold uk-text-center">
+                        <h:column>
+                            <f:facet name="header">Id video</f:facet>
+                            #{actividad.idVideo}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Nivel Lenguaje</f:facet>
+                            <ui:repeat value="#{actividad.nivelLenguajeModeloLista}" var="nivelLenguaje" varStatus="variable">
+                                #{nivelLenguaje.valor}<h:outputText value="," rendered="#{not variable.last}"/>
+                            </ui:repeat>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Tipo de aprendizaje</f:facet>
+                            #{actividad.tipoEstudianteModelo.valor}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Tiempo</f:facet>
+                            #{actividad.tiempo}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Topico</f:facet>
+                            #{actividad.temaModelo.valor}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Lenguaje</f:facet>
+                            #{actividad.lenguaje}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Pregunta</f:facet>
+                            #{actividad.preguntaDetonadora}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Opciones</f:facet>
+                            <div class="uk-inline ">
+                                <a class="uk-icon-button uk-margin-small-right" uk-icon="more-vertical"/>
+                                <h:panelGroup layout="block" styleClass="uk-dropdown" pt:uk-dropdown="mode: click;boundary: .opcion">
+                                    <ul class="uk-nav uk-dropdown-nav">
+                                        <li><h:link styleClass="uk-text-primary" value="Detalle" outcome="detalle-actividad" >
+                                            <f:param value="#{actividad.idVideo}" name="video"/>
+                                        </h:link>
+                                        </li>
+                                        <li><a href="#" class="uk-text-primary"
+                                        >Modificar</a></li>
+                                    </ul>
+                                </h:panelGroup>
+                            </div>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+                <div class="uk-card-footer">
+                    <a href="#modal-agregar" class="uk-button uk-button-primary" uk-toggle="">Nuevo</a>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    <div id="modal-agregar" uk-modal="">
+        <div class="uk-modal-dialog modal-tam scroll-actividad scroller">
+            <button class="uk-modal-close-default" type="button" uk-close=""/>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Actividad</h2>
+            </div>
+            <h:form method="post" styleClass="uk-form-stacked">
+                <div class="uk-modal-body">
+
+                    <div class="uk-grid" uk-grid="">
+                        <div class="uk-width-1-3">
+                            <label class="uk-form-label" for="form-IdVideo">ID Video</label>
+                            <div class="uk-form-controls">
+                                <h:inputText styleClass="uk-input uk-form-width-small"
+                                             id="form-IdVideo"
+                                             pt:placeholder="ID Video"
+                                             value="#{colaboradorDashboardControlador.actividadModelo.idVideo}"
+                                             binding="#{colaboradorDashboardControlador.htmlInputText}">
+                                    <f:validateRequired/>
+                                    <f:validateLength minimum="11" maximum="11"/>
+                                </h:inputText>
+                            </div>
+                            <h:message for="form-IdVideo" styleClass="uk-text-danger"/>
+                        </div>
+                        <div class="uk-width-1-3">
+                            <label class="uk-form-label" for="form-Score">Score</label>
+                            <div class="uk-form-controls">
+                                <h:inputText styleClass="uk-input uk-form-width-small" id="form-Score" pt:placeholder="100" value="#{colaboradorDashboardControlador.actividadModelo.puntaje}">
+                                    <f:validateRequired/>
+                                    <f:validateLength minimum="1"/>
+                                </h:inputText>
+                            </div>
+                            <h:message for="form-Score" styleClass="uk-text-danger"/>
+                        </div>
+                        <div class="uk-width-1-3">
+                            <label class="uk-form-label" for="form-Time">Time</label>
+                            <div class="uk-form-controls">
+                                <h:inputText styleClass="uk-input uk-form-width-small" id="form-Time" pt:placeholder="90" value="#{colaboradorDashboardControlador.actividadModelo.tiempo}">
+                                    <f:validateRequired/>
+                                    <f:validateLength minimum="0"/>
+                                </h:inputText>
+                            </div>
+                            <h:message for="form-Time" styleClass="uk-text-danger"/>
+                        </div>
+                        <div class="uk-width-1-2">
+                            <label class="uk-form-label" for="form-learnersType">Learners Type -Select-</label>
+                            <div class="uk-form-controls">
+                                <h:selectOneMenu  styleClass="uk-select uk-form-width-medium" id="form-learnersType" value="#{colaboradorDashboardControlador.actividadModelo.tipoEstudianteModelo.clave}">
+                                    <f:selectItems value="#{colaboradorDashboardControlador.tipoEstudianteModeloLista}"
+                                                   var="tipoEstudiante"
+                                                   itemLabel="#{tipoEstudiante.valor}"
+                                                   itemValue="#{tipoEstudiante.clave}"/>
+                                    <f:validateRequired/>
+                                </h:selectOneMenu>
+                            </div>
+                            <h:message for="form-learnersType" styleClass="uk-text-danger"/>
+                        </div>
+                        <div class="uk-width-1-2">
+                            <label class="uk-form-label" for="form-Topic">Topic -Select-</label>
+                            <div class="uk-form-controls">
+                                <h:selectOneMenu  styleClass="uk-select uk-form-width-medium" id="form-Topic" value="#{colaboradorDashboardControlador.actividadModelo.temaModelo.clave}">
+                                    <f:selectItems value="#{colaboradorDashboardControlador.temaModeloLista}"
+                                                   var="tipoTema"
+                                                   itemLabel="#{tipoTema.valor}"
+                                                   itemValue="#{tipoTema.clave}"/>
+                                    <f:validateRequired/>
+                                </h:selectOneMenu>
+                            </div>
+                            <h:message for="form-Topic" styleClass="uk-text-danger"/>
+                        </div>
+                    </div>
+                    <div class="uk-grid" uk-grid="">
+                        <div class="uk-width-1-2">
+                            <label class="uk-form-label" for="form-Language">Language</label>
+                            <div class="uk-form-controls">
+                                <h:inputText styleClass="uk-input uk-form-width-large" id="form-Language" pt:placeholder="e.g. Adverbs of Frequency" value="#{colaboradorDashboardControlador.actividadModelo.lenguaje}">
+                                    <f:validateRequired/>
+                                    <f:validateLength minimum="2" maximum="200"/>
+                                </h:inputText>
+                            </div>
+                            <h:message for="form-Language" styleClass="uk-text-danger"/>
+                        </div>
+                        <div class="uk-width-1-2">
+                            <label class="uk-form-label" for="form-LanguageLevel">Language Level</label>
+                            <div class="uk-form-controls">
+                                <h:selectManyCheckbox  styleClass="uk-form-width-medium" id="form-LanguageLevel" value="#{colaboradorDashboardControlador.checkBox}">
+                                    <f:selectItems value="#{colaboradorDashboardControlador.nivelLenguajeModeloLista}"
+                                                   var="nivelLeanguaje"
+                                                   itemValue="#{nivelLeanguaje.clave}" itemLabel="#{nivelLeanguaje.valor}"/>
+                                    <f:validateRequired/>
+                                </h:selectManyCheckbox>
+                            </div>
+                            <h:message for="form-LanguageLevel" styleClass="uk-text-danger"/>
+                        </div>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="form-Question">Question</label>
+                        <div class="uk-form-controls">
+                            <h:inputText styleClass="uk-input uk-form-width-large" id="form-Question" pt:placeholder="e.g. Who is the president of Russia?" value="#{colaboradorDashboardControlador.actividadModelo.preguntaDetonadora}">
+                                <f:validateRequired/>
+                                <f:validateLength minimum="2" maximum="100"/>
+                            </h:inputText>
+                        </div>
+                        <h:message for="form-Question" styleClass="uk-text-danger"/>
+                    </div>
+                    <div class="uk-margin">
+                        <label class="uk-form-label" for="form-Transcript">Transcript</label>
+                        <div class="uk-form-controls">
+                            <h:inputTextarea styleClass="uk-textarea" rows="30" id="form-Transcript"  value="#{colaboradorDashboardControlador.actividadModelo.transcripcion}">
+                                <f:validateRequired/>
+                                <f:validateLength minimum="2"/>
+                            </h:inputTextarea>
+                        </div>
+                        <script type="application/javascript" src="https://cdn.tiny.cloud/1/pga2ysw820w1p9z2gngkq4t7i6h7u3x91f57ow2jnijljbue/tinymce/5/tinymce.min.js"></script>
+                        <script type="application/javascript">
+                            tinymce.init({selector: 'textarea'});
+                            function llena(){
+                                tinymce.get('form-Transcript').getContent();
+                            }
+                        </script>
+                        <h:message for="form-Transcript" styleClass="uk-text-danger"/>
+                    </div>
+                </div>
+                <div class="uk-modal-footer uk-text-right">
+                    <h:commandButton styleClass="uk-button uk-button-primary" value="Agregar" >
+                        <f:ajax execute="@form" listener="#{colaboradorDashboardControlador.agregarActividad}" render="@form tabla-actividades"  onevent="function f(data) {
+                          console.log(data);
+                          llena();
+                        }"/>
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </div>
+    </div>
+    <script type="application/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/uikit.js"/>
+    <script type="application/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/uikit-icons.js"/>
+</h:body>
+
+
+</html>

@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:composition template="/template/escolar/template-alumno.xhtml">
+    <ui:define name="hamburguesa">
+        <div class="color-nav uk-hidden@m">
+            <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar="">
+                <div class="">
+                    <a class="logo uk-logo" href="#">
+                        <img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/esquadron.svg"  alt="logo" title="logo" width="30px" height="30px" />
+                        <span class="lescuadron letra-logo uk-visible@m">squadron</span>
+                    </a>
+                </div>
+                <div class="uk-navbar-right ">
+                    <a class="uk-navbar-toggle" uk-navbar-toggle-icon="" href="" uk-toggle="target: #menu" type="button"/>
+                </div>
+                <div id="menu" uk-offcanvas="overlay: true">
+                    <div class="uk-offcanvas-bar">
+                        <button class="uk-offcanvas-close" type="button" uk-close=""/>
+                        <ul class="uk-thumbnav uk-thumbnav-vertical  uk-margin-large-top">
+                            <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right" class="uk-active uk-text-capitalize"><h:link outcome="dashboard" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg" width="40" alt=""/></h:link></li>
+                            <li uk-tooltip="title: #{alumno['for.all.views.activity']}; pos: right"><h:link outcome="activities"><img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta1.svg" width="40" alt="" /></h:link></li>
+                            <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right"><h:link outcome="free-library"><img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg" width="40" alt="" /></h:link></li>
+                        </ul>
+                        <div class="uk-text-center uk-display-block uk-margin-large-top">
+                            <a href="#" class="uk-text-small uk-display-block uk-text-center uk-text-capitalize" style="color: black;"  data-uk-icon="icon: triangle-down; ratio: 0.7">#{etiqueta['menu']}</a>
+                            <div class="uk-dropdown user-hamburguesa" data-uk-dropdown="mode: click; pos: bottom-center; animation: uk-animation-slide-bottom-small; duration: 150">
+                                <h:form>
+                                    <h:commandLink styleClass="uk-text-capitalize  " style="font-size: 12px;" action="#{alumnoControlador.cerrarSesion()}" value="#{etiqueta['close.sesion']}"/>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="barra-nav"></div>
+        </div>
+    </ui:define>
+    <ui:define name="menu">
+        <div class="left-content-box  content-box-dark">
+            <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/avatar/astronauta-nino.svg" alt="niño" class="profile-img" rendered="#{alumnoControlador.alumnoModelo.sexo eq 'm'}"/>
+            <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/avatar/astronauta-nina.svg" alt="niña" class="profile-img" rendered="#{alumnoControlador.alumnoModelo.sexo eq 'f'}"/>
+            <h6 class="uk-text-center uk-margin-remove-vertical text-light nombre-usuario">#{alumnoControlador.alumnoModelo.apodo}</h6>
+            <div class="uk-position-relative uk-text-center uk-display-block">
+                <a href="#" class="uk-text-small uk-text-muted uk-display-block uk-text-center uk-text-capitalize" data-uk-icon="icon: triangle-down; ratio: 0.7">#{etiqueta['menu']}</a>
+                <div class="uk-dropdown user-drop" data-uk-dropdown="mode: click; pos: bottom-center; animation: uk-animation-slide-bottom-small; duration: 150">
+                    <h:form>
+                        <h:commandLink styleClass="uk-text-capitalize" action="#{alumnoControlador.cerrarSesion()}" value="#{etiqueta['close.sesion']}"/>
+                    </h:form>
+                </div>
+            </div>
+
+        </div>
+        <div class="left-nav-wrap  uk-visible@xl ">
+            <ul class="uk-thumbnav uk-thumbnav-vertical uk-position-center uk-margin-large-top">
+                <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right" class="uk-active"><h:link outcome="dashboard" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg" width="70" alt=""/></h:link></li>
+                <li uk-tooltip="title: #{alumno['for.all.views.activity']}; pos: right">
+                    <h:link outcome="activities" rendered="#{not empty alumnoControlador.tareaActvidadModeloLista}"><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta1.svg" width="70" alt="" /></h:link>
+                    <h:graphicImage rendered="#{empty alumnoControlador.tareaActvidadModeloLista}" url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta1.svg" width="70" alt="" />
+                </li>
+                <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right"><h:link outcome="free-library"><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg" width="70" alt="" /></h:link></li>
+            </ul>
+        </div>
+        <div class="left-nav-wrap uk-hidden@xl ">
+            <ul class="uk-thumbnav uk-thumbnav-vertical uk-position-center uk-margin-small-top">
+                <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right" class="uk-active"><h:link outcome="dashboard" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg" width="60" alt=""/></h:link></li>
+                <li uk-tooltip="title: #{alumno['for.all.views.activity']}; pos: right" >
+                    <h:link outcome="activities" rendered="#{not empty alumnoControlador.tareaActvidadModeloLista}"><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta1.svg" width="60" alt=""/></h:link>
+                    <h:graphicImage rendered="#{empty alumnoControlador.tareaActvidadModeloLista}" url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta1.svg" width="60"/>
+                </li>
+                <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right"><h:link outcome="free-library"><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg" width="60" alt=""/></h:link></li>
+            </ul>
+        </div>
+
+    </ui:define>
+    <ui:define name="contenido">
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/letra.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/alumno/dashboard.css"/>
+        <div class="">
+            <div class="uk-container padding-contenedor">
+                <h1 class="lescuadron letra-titulo primera-mayuscula">#{alumno['dashboard.title']}</h1>
+                 <h:panelGroup layout="block" styleClass="uk-grid" pt:uk-grid="">
+                     <div class="uk-width-1-3@m">
+                         <div class="uk-card uk-card-default color-card-dashboard-alumno border-grosor">
+                             <div class="uk-card-header">
+                                 <h:panelGroup styleClass="uk-grid-small uk-flex-middle" pt:uk-grid="">
+                                     <div class="uk-width-auto">
+                                         <h:graphicImage styleClass="uk-border-circle" width="50" height="50" url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/mounstro/morado.svg"/>
+                                     </div>
+                                     <div class="uk-width-expand">
+                                         <h3 class="uk-card-title uk-margin-remove-bottom uk-text-small uk-text-uppercase uk-text-bold"> #{alumnoControlador.alumnoModelo.nombre} #{alumnoControlador.alumnoModelo.apellidoPaterno} #{alumnoControlador.alumnoModelo.apellidoMaterno}</h3>
+                                         <p class="uk-text-meta uk-margin-remove-top uk-text-small"><span> #{alumnoControlador.alumnoModelo.apodo}</span></p>
+                                     </div>
+                                     <div class="uk-width-1-1@s">
+                                         <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small "><span class="uk-text-bold uk-text-capitalize">#{alumno['dashboard.email']}:</span> #{alumnoControlador.alumnoModelo.correoPadreFamilia}</p>
+                                         <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small "><span class="uk-text-bold uk-text-capitalize">#{alumno['dashboard.nivel']}:</span> #{alumnoControlador.alumnoModelo.nivelLenguajeModelo.valor}</p>
+                                         <c:choose>
+                                             <c:when test="${alumnoControlador.detalleAlumno2ModeloLista.size() gt 1}">
+                                                 <h:form id="formulario-grupo">
+                                                     <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small ">
+                                                         <span class="uk-text-bold uk-text-capitalize">ciclo escolar:</span>
+                                                         <h:outputText id="ciclo-escolar" value="${alumnoControlador.detalleAlumno2Modelo.descripcion}"/>
+                                                     </p>
+                                                     <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small uk-flex uk-flex-between">
+                                                         <span class="uk-text-bold uk-text-capitalize">grupo:</span>
+                                                         <h:selectOneMenu id="seleccion-grupo" style="border-color: #76448A !important; border-radius: 5px !important;" value="#{alumnoControlador.idGrupoSeleccionado}">
+                                                             <f:selectItems value="${alumnoControlador.detalleAlumno2ModeloLista}"
+                                                                            var="detalleAlumno2Modelo"
+                                                                            itemValue="${detalleAlumno2Modelo.idGrupo}"
+                                                                            itemLabel="${detalleAlumno2Modelo.grado} ${detalleAlumno2Modelo.grupo}"/>
+                                                             <f:ajax execute="seleccion-grupo" listener="#{alumnoControlador.buscaEscuela()}" render="formulario-grupo:ciclo-escolar formulario-tarea tareas tareas2 video-actividad"/>
+                                                         </h:selectOneMenu>
+                                                     </p>
+                                                 </h:form>
+                                             </c:when>
+                                             <c:otherwise>
+                                                 <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small"><span class="uk-text-bold uk-text-capitalize">ciclo escolar:</span>${alumnoControlador.detalleAlumno2Modelo.descripcion}</p>
+                                                 <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small"><span class="uk-text-bold uk-text-capitalize">grupo:</span>${alumnoControlador.detalleAlumno2Modelo.grado} ${alumnoControlador.detalleAlumno2Modelo.grupo}</p>
+                                             </c:otherwise>
+                                         </c:choose>
+                                     </div>
+                                 </h:panelGroup>
+                             </div>
+                             <div class="uk-card-body padding-card-body">
+                                 <ui:remove><h3 class="uk-text-uppercase uk-text-bold">#{alumno['dashboard.homework']}</h3></ui:remove>
+                                 <div class="imagen-actividad " id="video-actividad">
+                                     <div class="uk-text-center">#{alumno['dashboard.total.activities']}</div>
+
+                                 </div>
+                             </div>
+                             <div class="uk-card-footer">
+                                 <h3 class="uk-text-uppercase uk-text-bold">#{alumno['dashboard.teacher']}</h3>
+                                 <p>#{detalleAlumnoControlador.detalleAlumnoModelo.nombre} #{detalleAlumnoControlador.detalleAlumnoModelo.apellidoPaterno} #{detalleAlumnoControlador.detalleAlumnoModelo.apellidoMaterno}</p>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="uk-width-2-3@m">
+                         <div class="uk-section uk-border-rounded border-section uk-padding-remove color-card-dashboard-alumno" style="position:relative;padding-top:52.25%;">
+                             <div style="position:relative;padding-top:52.25%;" class="uk-margin-auto video-alumno">
+                                 <div id="anti-video">
+                                     <span id="botonply" uk-icon="icon: youtube; ratio: 4" class="visibilidad"/>
+                                 </div>
+                                 <div class="video-alum" style="position:absolute;top:0;left:0;width:100%;height:100%;" data-video="2PDXH4XBP44">
+
+                                 </div>
+
+                             </div>
+                         </div>
+                     </div>
+                 </h:panelGroup>
+                <h1 class="lescuadron letra-titulo uk-text-center primera-mayuscula">#{empty alumnoControlador.tareaActvidadModeloLista ? alumno['dashboard.not.homework'] : alumno['dashboard.homework.done']}</h1>
+                <div>
+                    <h:form id="formulario-tarea" styleClass="formulario-tareas-progreso" >
+                        <h:selectOneRadio value="#{tareasProgresoControlador.idTarea}">
+                            <f:selectItems value="#{alumnoControlador.tareaActvidadModeloLista}" var="tareaActividad"  itemLabel="#{tareaActividad.idActividad}" itemValue="#{tareaActividad.id}"/>
+                            <f:ajax event="change" listener="#{tareasProgresoControlador.buscaTareasRealizadas}" execute="@form" render="tareas tareas2 video-actividad"/>
+                        </h:selectOneRadio>
+                    </h:form>
+                    <ul>
+                        <li>
+                            <h:panelGroup layout="block" styleClass="vacio" rendered="#{empty alumnoControlador.tareaActvidadModeloLista}">#{alumno['dashboard.empty']}</h:panelGroup>
+                            <h:panelGroup id="tareas" layout="block" styleClass="fondo-comic5 uk-child-width-1-3@m uk-grid" pt:uk-grid="" rendered="#{not empty alumnoControlador.tareaActvidadModeloLista}">
+                                <div class="imagen-flexible uk-inline-clip uk-transition-toggle" tabindex="0">
+                                    <div class="uk-margin-remove">
+                                        <h:panelGroup layout="block" styleClass="uk-inline" pt:uk-lightbox="">
+                                            <h:graphicImage styleClass="img-alumno-dashboard uk-display-block uk-animation-shake" url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/mounstro/who.svg" alt="moustrou naranja" pt:uk-tooltip="title: #{alumno['more.activity.title.matching.words']}; pos: right"/>
+                                        </h:panelGroup>
+                                    </div>
+                                    <h:panelGroup layout="block" styleClass="uk-transition-fade uk-overlay-default  califica" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[0].total ne 0}">
+                                        <p class="uk-text-capitalize">#{alumno['more.activity.title.matching.words']}</p>
+                                        <ui:repeat value="#{tareasProgresoControlador.tareaAlumnoModeloLista}" var="calificacion">
+                                            <h:outputText rendered="#{(calificacion.id eq tareasProgresoControlador.idTarea) }" value="#{alumno['dashboard.score']}: #{calificacion.calificacionRelacionarImagen eq -1 ? alumno['dashboard.no.answer'] : calificacion.calificacionRelacionarImagen }"/>
+                                        </ui:repeat>
+                                    </h:panelGroup>
+                                   <h:panelGroup styleClass="contenedor-barra" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[0].total ne 0}">
+                                       <span>0%</span>
+                                       <progress class="uk-progress" value="#{tareasProgresoControlador.tareaResuetasModeloLista[0].respuesta}" max="#{tareasProgresoControlador.tareaResuetasModeloLista[0].total}"/>
+                                       <span>100%</span>
+                                   </h:panelGroup>
+                                </div>
+                                <div class="imagen-flexible uk-inline-clip uk-transition-toggle"  tabindex="0">
+                                        <div class="uk-margin-remove">
+                                            <h:panelGroup layout="block" styleClass="uk-inline" pt:uk-lightbox="">
+                                                <h:graphicImage styleClass="img-alumno-dashboard uk-animation-shake" url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/mounstro/whom.svg" alt="moustrou naranja"  pt:uk-tooltip="title: #{alumno['activities.title.comple.all.sentences']}; pos: right "/>
+                                            </h:panelGroup>
+                                        </div>
+                                    <h:panelGroup layout="block" styleClass="uk-transition-fade uuk-overlay-default  califica" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[1].total ne 0}">
+                                        <p class="uk-text-capitalize">#{alumno['activities.title.comple.all.sentences']}</p>
+                                        <ui:repeat value="#{tareasProgresoControlador.tareaAlumnoModeloLista}" var="calificacion">
+                                            <h:outputText rendered="#{(calificacion.id eq tareasProgresoControlador.idTarea) }" value="#{alumno['dashboard.score']}: #{ calificacion.calificacionCompletar eq -1 ? alumno['dashboard.no.answer'] : calificacion.calificacionCompletar }"/>
+                                        </ui:repeat>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="contenedor-barra" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[1].total ne 0}">
+                                        <span>0%</span>
+                                        <progress class="uk-progress" value="#{tareasProgresoControlador.tareaResuetasModeloLista[1].respuesta}" max="#{tareasProgresoControlador.tareaResuetasModeloLista[1].total}"/>
+                                        <span>100%</span>
+                                    </h:panelGroup>
+                                </div>
+                                <div class="imagen-flexible uk-inline-clip uk-transition-toggle" tabindex="0">
+<!--                                    <div class="" >-->
+                                        <div class="uk-margin-remove">
+                                            <h:panelGroup>
+                                                <h:graphicImage styleClass="img-alumno-dashboard uk-animation-shake " url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/mounstro/whose.svg" alt="moustrou naranja"  pt:uk-tooltip="title: #{alumno['activities.title.order.words']}; pos: right "/>
+                                            </h:panelGroup>
+                                        </div>
+
+<!--                                    </div>-->
+                                    <h:panelGroup layout="block" styleClass="uk-transition-fade  uk-overlay-default  califica" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[2].total ne 0}">
+                                        <p class="uk-text-capitalize">#{alumno['activities.title.order.words']}</p>
+                                        <ui:repeat value="#{tareasProgresoControlador.tareaAlumnoModeloLista}" var="calificacion">
+                                            <h:outputText rendered="#{(calificacion.id eq tareasProgresoControlador.idTarea)   }" value="#{alumno['dashboard.score']}: #{ calificacion.calificacionGramatica eq -1 ? alumno['dashboard.no.answer'] : calificacion.calificacionGramatica}"/>
+                                        </ui:repeat>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="contenedor-barra" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[2].total ne 0}">
+                                        <span>0%</span>
+                                        <progress class="uk-progress" value="#{tareasProgresoControlador.tareaResuetasModeloLista[2].respuesta}" max="#{tareasProgresoControlador.tareaResuetasModeloLista[2].total}"/>
+                                        <span>100%</span>
+                                    </h:panelGroup>
+                                </div>
+                            </h:panelGroup>
+                            <h:panelGroup id="tareas2" layout="block" styleClass="uk-grid uk-child-width-1-3@m uk-grid" pt:uk-grid="" rendered="#{not empty alumnoControlador.tareaActvidadModeloLista}">
+                                <div class="fondo-comic" style="border: 6px solid white; padding: 0;">
+                                    <div class="imagen-flexible uk-inline-clip uk-transition-toggle" tabindex="0">
+                                            <div class="uk-margin-remove">
+                                                <h:panelGroup>
+                                                    <h:graphicImage styleClass="img-alumno-dashboard uk-animation-shake"  url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/mounstro/3ojos.svg" alt="moustrou naranja"  pt:uk-tooltip="title: #{alumno['for.all.views.mind.map']}; pos: right"/>
+                                                </h:panelGroup>
+                                            </div>
+                                            <h:panelGroup layout="block" styleClass="uk-transition-fade  uk-overlay-default  califica" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[3].total ne 0}">
+                                                <p class="uk-text-capitalize">#{alumno['for.all.views.mind.map']}</p>
+                                                <ui:repeat value="#{tareasProgresoControlador.tareaAlumnoModeloLista}" var="calificacion">
+                                                    <h:outputText rendered="#{(calificacion.id eq tareasProgresoControlador.idTarea)   }" value="#{alumno['dashboard.score']}: #{ calificacion.calificacionMapamental eq -1 ? alumno['dashboard.no.answer'] : calificacion.calificacionMapamental}"/>
+                                                </ui:repeat>
+                                            </h:panelGroup>
+                                        <h:panelGroup styleClass="contenedor-barra" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[3].total ne 0}">
+                                            <span>0%</span>
+                                            <progress class="uk-progress" value="#{tareasProgresoControlador.tareaResuetasModeloLista[3].respuesta}" max="#{tareasProgresoControlador.tareaResuetasModeloLista[3].total}"/>
+                                            <span>100%</span>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                                <div class="fondo-comic4 " style="border: 6px solid white; padding: 0;">
+                                    <div class="imagen-flexible uk-inline-clip uk-transition-toggle" tabindex="0">
+                                            <div class="uk-margin-remove">
+                                                <h:panelGroup>
+                                                    <h:graphicImage styleClass="img-alumno-dashboard uk-animation-shake" url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/mounstro/verde.svg" alt="moustrou naranja"  pt:uk-tooltip="title: #{alumno['activities.title.order.sentences']}; pos: right "/>
+                                                </h:panelGroup>
+                                            </div>
+                                            <h:panelGroup layout="block" styleClass="uk-transition-fade uk-overlay-default califica" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[4].total ne 0}">
+                                                <p class="uk-text-capitalize">#{alumno['activities.title.order.sentences']}</p>
+                                                <ui:repeat value="#{tareasProgresoControlador.tareaAlumnoModeloLista}" var="calificacion">
+                                                    <h:outputText rendered="#{(calificacion.id eq tareasProgresoControlador.idTarea)   }" value="#{alumno['dashboard.score']}: #{ calificacion.calificacionOraciones eq -1 ? alumno['dashboard.no.answer'] : calificacion.calificacionOraciones}"/>
+                                                </ui:repeat>
+                                            </h:panelGroup>
+                                        <h:panelGroup styleClass="contenedor-barra" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[4].total ne 0}">
+                                            <span>0%</span>
+                                            <progress class="uk-progress" value="#{tareasProgresoControlador.tareaResuetasModeloLista[4].respuesta}" max="#{tareasProgresoControlador.tareaResuetasModeloLista[4].total}"/>
+                                            <span>100%</span>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                                <div class="fondo-comic6 " style="border: 6px solid white; padding: 0;">
+                                    <div class="imagen-flexible uk-inline-clip uk-transition-toggle" tabindex="0">
+                                            <div class="uk-margin-remove">
+                                                <h:panelGroup>
+                                                    <h:graphicImage styleClass="img-alumno-dashboard uk-animation-shake" url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/mounstro/naranja.svg" alt="moustrou naranja"  pt:uk-tooltip="title: #{alumno['activities.bar.icon.match']}; pos: right"/>
+                                                </h:panelGroup>
+                                            </div>
+                                            <h:panelGroup layout="block" styleClass="uk-transition-fade uk-overlay-default califica" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[5].total ne 0}">
+                                                <p class="uk-text-capitalize">#{alumno['activities.bar.icon.match']}</p>
+                                                <ui:repeat value="#{tareasProgresoControlador.tareaAlumnoModeloLista}" var="calificacion">
+                                                    <h:outputText rendered="#{(calificacion.id eq tareasProgresoControlador.idTarea)   }" value="#{alumno['dashboard.score']}: #{ calificacion.calificacionRelacionarOraciones eq -1 ? alumno['dashboard.no.answer'] : calificacion.calificacionRelacionarOraciones}"/>
+                                                </ui:repeat>
+                                            </h:panelGroup>
+                                        <h:panelGroup styleClass="contenedor-barra" rendered="#{tareasProgresoControlador.tareaResuetasModeloLista[5].total ne 0}">
+                                            <span>0%</span>
+                                            <progress class="uk-progress" value="#{tareasProgresoControlador.tareaResuetasModeloLista[5].respuesta}" max="#{tareasProgresoControlador.tareaResuetasModeloLista[5].total}"/>
+                                            <span>100%</span>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <script type="application/javascript">
+            document.addEventListener("DOMContentLoaded", radio);
+            var tiempo;
+            var tag = document.createElement('script');
+            var videoPlayer = document.querySelector('.video-alum');
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            var player,btnPlayer;
+            btnPlayer = document.querySelector('#botonply');
+            btnPlayer.addEventListener('click',() => {
+                document.querySelector("#anti-video").classList.remove('finalVideo');
+                document.querySelector("#botonply").classList.add('visibilidad');
+                player.playVideo();
+
+            });
+
+
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player( videoPlayer, {
+                    height: '100%',
+                    width: '100%',
+                    videoId: videoPlayer.dataset.video,
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            }
+
+            function onPlayerReady(event) {
+                console.log(event, 'Evento Listo!!');
+            }
+
+            var done = false;
+            function onPlayerStateChange(event) {
+                // console.log(event.target.a.id);
+
+                switch (event.data) {
+                    case 0: {
+                        document.querySelector("#anti-video").classList.remove('prueba');
+                            document.querySelector("#anti-video").classList.add('finalVideo');
+                            document.querySelector("#botonply").classList.remove('visibilidad');
+                        break;
+                    }
+                    case 1: {
+                        // console.log("reproduciendo");
+                        break;
+                    }
+                    case 2: {
+                        document.querySelector("#anti-video").classList.add('prueba');
+                        // console.log("pausado");
+                        break;
+                    }
+                }
+            }
+            function radio() {
+                var contenedorVideo = document.querySelector('#video-actividad');
+                var imagen = document.createElement('img');
+                var videos = [];
+                var linkVideo = "https://www.youtube.com/embed/";
+                var linkImagen = "https://i.ytimg.com/vi/";
+                var botones = document.querySelectorAll('.formulario-tareas-progreso  tbody > tr > td > input[type=radio]');
+
+                var boton = document.querySelector('.formulario-tareas-progreso  tbody > tr > td:first-child > input[type=radio]');
+
+                boton.click();
+                var idVideos = document.querySelectorAll('.formulario-tareas-progreso  tbody > tr > td > label');
+                idVideos.forEach(function (id) {
+                    videos.push(id.innerHTML);
+                });
+
+                while (contenedorVideo.hasChildNodes()){
+                    contenedorVideo.removeChild(contenedorVideo.firstChild);
+                }
+                var linkCompleto = linkImagen.concat(videos[0].trim());
+                imagen.setAttribute('src',linkCompleto.concat('/mqdefault.jpg'));
+                contenedorVideo.appendChild(imagen);
+                console.log(videos);
+                botones.forEach(function (evento ,index) {
+                    evento.addEventListener('click',function (dato) {
+                         var actividad = document.querySelector('#video-actividad iframe');
+                         var imagen = document.createElement('img');
+                         while (contenedorVideo.hasChildNodes()){
+                             contenedorVideo.removeChild(contenedorVideo.firstChild);
+                         }
+                        var linkCompleto = linkImagen.concat(videos[index].trim());
+                         imagen.setAttribute('src',linkCompleto.concat('/mqdefault.jpg'));
+                        contenedorVideo.appendChild(imagen);
+                        tiempo = setTimeout(puntaje,1500);
+                    });
+                });
+
+                setTimeout(boton.click(),2000);
+            }
+
+        </script>
+        <script type="application/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/alumno/calificacion.js"></script>
+    </ui:define>
+</ui:composition>
+</html>
+

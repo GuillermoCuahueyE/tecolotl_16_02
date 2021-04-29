@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pa="http://xmlns.jcp.org/jsf/composite/paginacion">
+
+<ui:composition template="/template/profesor/dashboard-profesor.xhtml">
+    <ui:define name="menu">
+            <ul class="uk-subnav nav-sub uk-visible@m " uk-margin="">
+                <li><span>#{etiqueta['home']}</span></li>
+            </ul>
+        <div>
+            <h:form><h:commandLink action="#{profesorControlador.cerrarSesion}" onclick=" limpiarSession()" value="#{etiqueta['close.sesion']}"/></h:form>
+        </div>
+        <div class="uk-navbar-left uk-hidden@m">
+            <a class="uk-navbar-toggle" uk-navbar-toggle-icon="" href="" uk-toggle="target: #menu" type="button"/>
+        </div>
+        <div id="menu" uk-offcanvas="overlay: true">
+            <div class="uk-offcanvas-bar">
+                <ul class="uk-nav  nav-sub-offcanvas ">
+                    <li class="nav-sub-active"><span class="uk-text-capitalize">#{etiqueta['home']}</span></li>
+                </ul>
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="contenido">
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/profesor/grafica.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/modal.css"/>
+        <div class="uk-margin-large-top"><h1 class="uk-margin-top uk-text-capitalize lescuadron ">#{profesor['dashboard.title']}!</h1></div>
+        <div class="uk-grid" uk-grid="">
+            <div class="uk-width-1-3@m">
+                <div class="uk-card uk-card-default uk-card-small color-card-six margen-one">
+                    <div class="uk-card-header border-card">
+                        <div class="uk-grid-small uk-flex-middle" uk-grid="">
+                            <div class="uk-width-auto">
+                                <img src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/avatar/maestro.svg" style="border-radius: 150px" alt="maestro" width="50" height="50"/>
+                            </div>
+                            <div class="uk-width-expand">
+                                <h3 class="uk-card-title uk-margin-remove-bottom uk-text-small  uk-text-bold">
+                                    #{profesorControlador.profesorModelo.nombre.concat(' ').concat(profesorControlador.profesorModelo.apellidoPaterno).concat(' ').concat(profesorControlador.profesorModelo.apellidoMaterno)}
+                                </h3>
+                                <p class="uk-text-meta uk-margin-remove-top uk-text-small"><span>#{profesorControlador.profesorModelo.apodo}</span></p>
+                            </div>
+                            <div class="uk-width-1-1@s">
+                                <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small uk-margin-small-bottom ">
+                                    <span class="uk-text-bold uk-text-capitalize">#{profesor['dashboard.nickname']}: </span>#{profesorControlador.profesorModelo.apodo}
+                                </p>
+                                <p class="uk-text-meta uk-margin-remove-bottom uk-margin-remove-top uk-text-small uk-margin-small-bottom ">
+                                    <span class="uk-text-bold uk-text-capitalize">#{profesor['dashboard.email']}: </span>#{profesorControlador.profesorModelo.correoEletronico}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card-body padding-card-body">
+                        <h3 class="uk-text-uppercase uk-text-bold ">question?</h3>
+                        <p>We've got answers! <span class="uk-text-primary">Contact Us</span></p>
+                    </div>
+                    <div class="uk-card-footer">
+                        <h3 class="uk-text-uppercase uk-text-bold">Teacher Training</h3>
+                        <p>Learn more with our free <span class="">e-squadron courses!</span></p>
+                    </div>
+                </div>
+            </div>
+            <h:panelGroup layout="block" styleClass="uk-width-2-3@m uk-text-bold uk-flex uk-flex-center uk-flex-middle" rendered="#{empty dashboardProfesorControlador.cicloEscolarModeloLista}">
+               <span class="titulo-section">#{profesor['student.administration.error']}</span>
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="uk-width-2-3@m" rendered="#{not empty dashboardProfesorControlador.cicloEscolarModeloLista}">
+                <h:form id="formulario-grupo" styleClass="uk-form-horizontal">
+                    <div class="uk-margin">
+                        <h:outputLabel for="ciclo-escolar-select" value="#{profesor['dashboard.school.cycle']}:" styleClass="uk-form-label uk-text-bold uk-text-capitalize"/>
+                        <div class="uk-form-controls">
+                            <h:selectOneMenu value="#{dashboardProfesorControlador.hashCode}"
+                                             id="ciclo-escolar-select"
+                                             styleClass="uk-select">
+                                <f:selectItems value="#{dashboardProfesorControlador.cicloEscolarModeloLista}"
+                                               var="cicloEscolar"
+                                               itemLabel="#{cicloEscolar.descripcion}"
+                                               itemValue="#{cicloEscolar.hashCode()}"/>
+                                <f:ajax event="change"
+                                        execute="@form"
+                                        listener="#{dashboardProfesorControlador.seleccion()}"
+                                        onevent="function grafica(data) {
+                                            console.log(data.status);
+                                            if (data.status === 'success')
+                                               {datosGrupo();
+                                               visualizar();}
+                                        }"
+                                        render="formulario-grupo:fecha-fin formulario-grupo:fecha-inicio formulario-grupo:descripcion formulario-tabla graficas"/>
+                            </h:selectOneMenu>
+                        </div>
+                    </div>
+                    <h:panelGroup layout="block" styleClass="uk-margin uk-grid uk-child-width-1-2@m" pt:uk-grid="">
+                        <div>
+                            <div class="titulo-section uk-text-center uk-text-bold uk-text-capitalize">#{profesor['dashboard.start']}</div>
+                            <h:outputText id="fecha-inicio" value="#{dashboardProfesorControlador.cicloEscolarModelo.inicio}">
+                                <f:convertDateTime dateStyle="medium"/>
+                            </h:outputText>
+                        </div>
+                        <div>
+                            <div class="titulo-section uk-text-center uk-text-bold uk-text-capitalize">#{profesor['dashboard.end']}</div>
+                            <h:outputText id="fecha-fin" value="#{dashboardProfesorControlador.cicloEscolarModelo.fin}">
+                                <f:convertDateTime dateStyle="medium"/>
+                            </h:outputText>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="uk-margin uk-grid uk-child-width-1-1@m">
+                        <div>
+                            <div class="titulo-section uk-text-center uk-text-bold uk-text-capitalize">#{profesor['dashboard.description']}</div>
+                            <h:outputText id="descripcion" value="#{dashboardProfesorControlador.cicloEscolarModelo.descripcion}"/>
+                        </div>
+                    </h:panelGroup>
+                </h:form>
+                <div class="boton-reporte">
+                    <h:button outcome="buzon" id="inbox-boton" value="#{profesor['mail.box']}" styleClass="boton-escuadron-base" pt:data-total-buzon="#{totalBuzonControlador.tareasAsigandas}"/>
+                    <button id="boton-reporte" class="boton-escuadron-base">#{profesor['report']}</button>
+                </div>
+            </h:panelGroup>
+        </div>
+        <h:panelGroup layout="block" id="graficas" >
+            <ui:repeat value="#{dashboardProfesorControlador.alumnoTareasNivelModeloLista}" var="alumnoTareasNivelModelo">
+                <div>
+                    <span>#{alumnoTareasNivelModelo.idGrupo}</span><span>#{alumnoTareasNivelModelo.idAlumno}</span>
+                    <span>#{alumnoTareasNivelModelo.nombre} #{alumnoTareasNivelModelo.apellidoPaterno} #{alumnoTareasNivelModelo.apellidoMaterno}</span>
+                    <span>#{alumnoTareasNivelModelo.totalTareas}</span><span>#{alumnoTareasNivelModelo.nivelLenguaje}</span><span>#{alumnoTareasNivelModelo.nivelLenguajeAlumno}</span>
+                    <span>#{alumnoTareasNivelModelo.promedio}</span>
+                </div>
+            </ui:repeat>
+        </h:panelGroup>
+        <h:panelGroup layout="block" styleClass="uk-container graficas" id="canvas">
+
+        </h:panelGroup>
+        <div class="uk-flex uk-flex-center">
+            <button class="boton-escuadron-base">#{boton['back']}</button><button class="boton-escuadron-base uk-margin-medium-left">#{boton['next']}</button>
+        </div>
+        <div class="uk-container uk-container-small uk-margin-medium-top uk-margin-large-bottom">
+            <div class="uk-text-bold uk-margin-remove-bottom titulo-section padding-titulo primera-mayuscula">
+                <h:outputText
+                              value="#{empty dashboardProfesorControlador.grupoModeloLista ? profesor['dashboard.table.title.not.group'] : profesor['dashboard.table.title.group']}">
+                </h:outputText>
+            </div>
+            <h:form id="formulario-tabla" styleClass="uk-form-stacked">
+                <div class=" uk-margin-small-top">
+                    <ui:fragment rendered="#{empty dashboardProfesorControlador.grupoModeloLista}">
+                        <table class="uk-table uk-table-middle tablaPrimaria">
+                            <thead >
+                            <tr>
+                                <th class="thPrimario uk-text-center"><span>#{profesor['dashboard.table.schoolgrade']}</span></th>
+                                <th class="thPrimario uk-text-center"><span >#{profesor['dashboard.group']}</span></th>
+                                <th class="thPrimario uk-text-center"><span >#{profesor['dashboard.total.students']}</span></th>
+                                <th class="thPrimario uk-text-center"><span >#{etiqueta['options']}</span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr >
+                                <td colspan="6" class="tdPrimario">
+                                    <div class="uk-flex uk-flex-center">
+                                        <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/vacio.svg"  height="215" width="243" alt="vacio"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </ui:fragment>
+                    <h:dataTable
+                            value="#{dashboardProfesorControlador.grupoModeloLista}"
+                            rendered="#{not empty dashboardProfesorControlador.grupoModeloLista}"
+                            id="tabla-grupo"
+                            var="grupo"
+                            styleClass="uk-table uk-table-justify uk-table-small uk-table-middle tablaPrimaria uk-table-hover uk-text-center tabla-profesor-dropdown"
+                            headerClass="thPrimario uk-text-center"
+                            columnClasses=",,,uk-width-small"
+                            rowClasses="tdPrimario"
+                            footerClass="thPrimario uk-text-left">
+                        <h:column>
+                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{profesor['dashboard.table.schoolgrade']}</span></f:facet>
+                            #{grupo.grado}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{profesor['dashboard.group']}</span></f:facet>
+                            #{grupo.grupo}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{profesor['dashboard.total.students']}</span></f:facet>
+                            ${grupo.totalAlumno}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header"><span class="letra-tabla uk-text-bold">#{etiqueta['options']}</span></f:facet>
+                            <div class="uk-inline  ">
+                                <button class="uk-icon-button puntero" uk-icon="more-vertical" type="button"/>
+                                <div uk-dropdown="boundary:.tabla-profesor-dropdown; mode: click" id="dropear" style="min-width: 150px">
+                                    <ul class="uk-nav uk-dropdown-nav uk-text-left">
+                                        <li style="padding-left: 10px">
+                                            <h:link outcome="alumnos" styleClass="uk-text-primary uk-text-capitalize" >
+                                                <h:outputText pt:uk-icon="icon: file-edit" styleClass="uk-margin-small-right uk-icon" />
+                                                <f:param name="grupo" value="#{grupo.id}"/>
+                                                <span class="uk-text-middle"><h:outputText value="#{etiqueta['detail']}"/></span>
+                                            </h:link>
+                                        </li>
+                                        <ui:fragment rendered="${grupo.totalAlumno > 0}">
+                                            <li style="padding-left: 10px">
+                                                <h:link outcome="asignar-tarea" styleClass="uk-text-primary uk-text-capitalize">
+                                                    <img class="uk-margin-small-right" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/icono/gramatica.svg" alt="gramatica" width="20"/>
+                                                    <span class="uk-text-middle"><h:outputText value="#{profesor['assign.activity.title']}"/></span>
+                                                    <f:param name="grupo" value="#{grupo.id}"/>
+                                                </h:link>
+                                            </li>
+                                            <li style="padding-left: 10px">
+                                                <h:commandLink pt:nh-modal="modal-actividades"
+                                                               action="#{eliminarTareaControlador.carga}"
+                                                               styleClass="uk-text-primary uk-text-capitalize">
+                                                    <h:outputText pt:uk-icon="icon: trash" styleClass="uk-margin-small-right uk-icon" />
+                                                    <span class="uk-text-middle">Delete HW</span>
+                                                    <f:setPropertyActionListener value="#{grupo.id}" target="#{eliminarTareaControlador.idGrupo}"/>
+                                                    <f:ajax render="formulario-borrar-tarea"/>
+                                                </h:commandLink>
+                                            </li>
+                                        </ui:fragment>
+                                    </ul>
+                                </div>
+                            </div>
+                        </h:column>
+                    </h:dataTable>
+                </div>
+            </h:form>
+            <a id="reporte" style="display: none">boton</a>
+        </div>
+
+        <h:form id="formulario-cambio-nivel">
+            <h:inputHidden id="entrada-alumno" value="#{cambioNivelAlumnoControlador.idAlumno}"/>
+            <h:inputHidden id="entrada-nivel" value="#{cambioNivelAlumnoControlador.nivel}"/>
+            <h:commandButton style="display: none">
+                <f:ajax
+                        execute="@form"
+                        listener="#{cambioNivelAlumnoControlador.cambiaNivel}"
+                        />
+            </h:commandButton>
+        </h:form>
+
+        <div class="modal-contenedor" id="modal-actividades">
+            <div class="modal modal-largo">
+                <div class="modal-cabecera">
+                    <h3>Delete Activity</h3>
+                </div>
+                <div class="modal-cuerpo">
+                    <h:form id="formulario-borrar-tarea">
+                        <h:dataTable
+                                id="tabla-actividades"
+                                value="#{eliminarTareaControlador.tareasGrupoVistaModeloLista}"
+                                var="tareaGrupoVistaModelo"
+                                styleClass="uk-table uk-table-justify uk-table-small uk-table-middle tablaPrimaria uk-table-hover uk-text-center tabla-profesor-dropdown"
+                                headerClass="thPrimario uk-text-center"
+                                columnClasses=",,,uk-width-small"
+                                rowClasses="tdPrimario"
+                                footerClass="thPrimario uk-text-left">
+                            <h:column>
+                                <f:facet name="header"><span class="letra-tabla uk-text-bold">#{profesor['dashboard.modal.delete.activity.task']}</span></f:facet>
+                                <h:graphicImage url="https://i.ytimg.com/vi/${tareaGrupoVistaModelo.idVideo}/mqdefault.jpg" style="width: 100px"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header"><span class="letra-tabla uk-text-bold">#{profesor['dashboard.modal.delete.activity.question']}</span></f:facet>
+                                ${tareaGrupoVistaModelo.preguntaDetonadora}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header"><span class="letra-tabla uk-text-bold">#{profesor['dashboard.modal.delete.activity.assignment']}</span></f:facet>
+                                ${tareaGrupoVistaModelo.totalTareas}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header"> </f:facet>
+                                <button type="button" onclick="mensajeConfirmacion(this)"  uk-icon="icon: trash" />
+                                <div class="mensaje-confirmacion visibilidad">
+                                    <span>#{profesor['dashboard.delete.activity']}</span>
+                                    <div>
+                                        <button type="button" class="boton-escuadron-base">#{boton['cancel']}</button>
+                                        <h:commandLink styleClass="boton-escuadron-base" style="background-color: var(--color-peligro)" value="#{boton['remove']}">
+                                            <f:ajax listener="#{eliminarTareaControlador.elimina(tareaGrupoVistaModelo.idVideo)}" render="@form"/>
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </div>
+                <div class="modal-pie">
+                    <button class="cerrar-modal boton-escuadron-base uk-margin-medium-right">#{boton['close']}</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-contenedor" id="modal-nivel-bajar">
+            <div class="modal ">
+                <div class="modal-cabecera" style="background-color: var(--color-peligro)">
+                    <h3>level down</h3>
+                </div>
+                <div class="modal-cuerpo" style="display: flex; align-items: center; justify-content: center;" >
+                   <span style="font-size: 20px; font-weight: 900;" >Are you sure to move this student down?</span>
+                </div>
+                <div class="modal-pie">
+                    <button class="boton-escuadron-base uk-margin-small-right" style="background-color: var(--color-peligro)" >level down</button>
+                    <button class="boton-escuadron-base ">#{boton['cancel']}</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-contenedor" id="modal-nivel-subir">
+            <div class="modal ">
+                <div class="modal-cabecera" >
+                    <h3>level up</h3>
+                </div>
+                <div class="modal-cuerpo" style="display: flex; align-items: center; justify-content: center;" >
+                    <span style="font-size: 20px; font-weight: 900;" >#{profesor['sube.nivel']}</span>
+                </div>
+                <div class="modal-pie">
+                    <button class="boton-escuadron-base uk-margin-small-right" style="background-color: var(--azul-primary-color)" >level up</button>
+                    <button class="boton-escuadron-base">#{boton['cancel']}</button>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="file-js">
+        <script type="application/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/modal.js"></script>
+
+        <script type="text/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/profesor/grafica.js"></script>
+        <script type="application/javascript">
+
+            const msj_nivel = "#{profesor['msj.nivel']}";
+            document.addEventListener('DOMContentLoaded',() =>{
+                let btnReport = document.querySelector('#boton-reporte');
+                let tablaGrupos = document.querySelectorAll('#formulario-tabla table tbody > tr > td:last-child  ul > li:first-child > a');
+                let idGrupos = [];
+                tablaGrupos.forEach(table =>{
+                    let cadenaUrl = table.href;
+                    idGrupos.push(cadenaUrl.split("=")[1])
+                });
+                let cadenaIdGrupos = idGrupos.join(",");
+                console.log(cadenaIdGrupos);
+                btnReport.addEventListener('click',()=>{
+                    UIkit.notification("The document is being downloaded, please wait");
+                    var hiddenElemento = document.querySelector('#reporte');
+                    hiddenElemento.href = "https://reportes.e-squadron.com.mx/reporte-nivel?grupos=".concat(cadenaIdGrupos);
+                    hiddenElemento.click();
+                });
+            });
+
+        </script>
+        <script type="application/javascript">
+            let botonInbox = document.querySelector('#inbox-boton');
+            if (sessionStorage.getItem('mensaje') === null){
+                sessionStorage.setItem('mensaje','true');
+            }
+            if (parseInt(botonInbox.dataset.totalBuzon) === 0){
+                botonInbox.disabled = true;
+                botonInbox.classList.add('boton-disabilitado')
+            }
+
+            function mensajeConfirmacion(element) {
+                let mensajeConfirmacion = element.nextElementSibling;
+                mensajeConfirmacion.classList.remove('visibilidad');
+                mensajeConfirmacion.querySelector('button').addEventListener('click',()=>{
+                    mensajeConfirmacion.classList.add('visibilidad');
+                });
+            }
+
+        </script>
+    </ui:define>
+
+</ui:composition>
+</html>

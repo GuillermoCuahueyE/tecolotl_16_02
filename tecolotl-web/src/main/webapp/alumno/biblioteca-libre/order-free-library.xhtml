@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="/template/escolar/template-alumno.xhtml">
+    <ui:define name="hamburguesa">
+        <div class="color-nav uk-hidden@m">
+            <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar="">
+                <div class="">
+                    <a class="logo uk-logo" href="#">
+                        <h:graphicImage  url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/esquadron.svg"  alt="logo" title="logo" width="30px" height="30px" />
+                        <span class="lescuadron letra-logo uk-visible@m">squadron</span>
+                    </a>
+                </div>
+                <div class="uk-navbar-right ">
+                    <a class="uk-navbar-toggle" uk-navbar-toggle-icon="" href="" uk-toggle="target: #menu" type="button"/>
+                </div>
+                <div id="menu" uk-offcanvas="overlay: true">
+                    <div class="uk-offcanvas-bar  ">
+                        <button class="uk-offcanvas-close" type="button" uk-close=""/>
+                        <ul class="uk-thumbnav uk-thumbnav-vertical  uk-margin-large-top">
+                            <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right" class="uk-text-capitalize"><h:link outcome="dashboard" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg" width="40" alt=""/></h:link></li>
+                            <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right" class="uk-active"><h:link outcome="free-library" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg"  width="40" alt="" /></h:link></li>
+                        </ul>
+                        <div class="uk-text-center uk-display-block uk-margin-large-top">
+                            <a href="#" class="uk-text-small uk-display-block uk-text-center uk-text-capitalize" style="color: black;"  data-uk-icon="icon: triangle-down; ratio: 0.7">#{etiqueta['menu']}</a>
+                            <div class="uk-dropdown user-hamburguesa" data-uk-dropdown="mode: click; pos: bottom-center; animation: uk-animation-slide-bottom-small; duration: 150">
+                                <h:form>
+                                    <h:commandLink styleClass="uk-text-capitalize  " style="font-size: 12px;" action="#{alumnoControlador.cerrarSesion()}" value="#{etiqueta['close.sesion']}"/>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="barra-nav"></div>
+        </div>
+    </ui:define>
+    <ui:define name="menu">
+        <div class="left-content-box  content-box-dark">
+            <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/avatar/astronauta-nino.svg" alt="niño" class="profile-img" rendered="#{alumnoControlador.alumnoModelo.sexo eq 'm'}"/>
+            <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/avatar/astronauta-nina.svg" alt="niña" class="profile-img" rendered="#{alumnoControlador.alumnoModelo.sexo eq 'f'}"/>
+            <h6 class="uk-text-center uk-margin-remove-vertical text-light nombre-usuario">#{alumnoControlador.alumnoModelo.apodo} </h6>
+            <div class="uk-position-relative uk-text-center uk-display-block">
+                <a href="#" class="uk-text-small uk-text-muted uk-display-block uk-text-center uk-text-capitalize" data-uk-icon="icon: triangle-down; ratio: 0.7">#{etiqueta['menu']}</a>
+                <div class="uk-dropdown user-drop" data-uk-dropdown="mode: click; pos: bottom-center; animation: uk-animation-slide-bottom-small; duration: 150">
+
+                    <h:form>
+                        <h:commandLink styleClass="uk-text-capitalize" action="#{alumnoControlador.cerrarSesion()}" value="#{etiqueta['close.sesion']}"/>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+        <div class="left-nav-wrap  uk-visible@xl ">
+            <ul class="uk-thumbnav uk-thumbnav-vertical uk-position-center uk-margin-large-top">
+                <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right" class="uk-text-capitalize"><h:link outcome="dashboard" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg" width="70" alt=""/></h:link></li>
+                <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right" class="uk-active"><h:link outcome="free-library" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg"  width="70" alt="" /></h:link></li>
+            </ul>
+        </div>
+        <div class="left-nav-wrap uk-hidden@xl ">
+            <ul class="uk-thumbnav uk-thumbnav-vertical uk-position-center uk-margin-small-top">
+                <li uk-tooltip="title: #{alumno['for.all.views.dashboard']}; pos: right" ><h:link outcome="dashboard" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/tierra.svg"  width="60" alt=""/></h:link></li>
+                <li uk-tooltip="title: #{alumno['for.all.views.library']}; pos: right" class="uk-active"><h:link outcome="free-library" ><h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/alumno/planetas/planeta5.svg"  width="60" alt="" /></h:link></li>
+            </ul>
+        </div>
+    </ui:define>
+    <ui:define name="contenido">
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/alumno/transcript/ordenar-palabra.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/alumno/transcript/transcript-drag.css"/>
+        <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/letra.css"/>
+        <div class="uk-section" style="box-sizing: border-box">
+             <div class="uk-container padding-contenedor">
+                 <div class="uk-inline uk-flex uk-flex-left uk-text-bold">
+                     <a><h:graphicImage styleClass="img-ayuda" url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/icono/information.svg" pt:uk-svg=""/></a>
+                     <div uk-dropdown="mode: click">Make sentences  using can and  the words provided</div>
+                 </div>
+                 <h1 class="uk-text-center lescuadron" style="color: white"> #{alumno['activities.word.order.instruction.title']}</h1>
+
+                 <h:outputText styleClass="sin-tarea1" value="No homework" rendered="#{empty gramaticaBibliotecaLibreControlador.gramaticaModeloLista}"/>
+
+                 <div class="imagen-ordenar">
+                     <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/mounstro/whom.svg"/>
+                 </div>
+                 <h:panelGroup layout="block" render="#{not empty gramaticaBibliotecaLibreControlador.gramaticaModeloLista}">
+                     <ul class="uk-subnav uk-subnav-pill uk-flex uk-flex-center menu-ordenar scroll-drag" uk-switcher="">
+                         <ui:repeat value="#{gramaticaBibliotecaLibreControlador.gramaticaModeloLista}" var="gramatica" varStatus="estatus">
+                             <li class="#{empty gramatica.palabra ? 'boton-falta' : 'boton-listo'}">#{estatus.index + 1}</li>
+                         </ui:repeat>
+                     </ul>
+                     <ul class="uk-switcher uk-margin scroll-drag">
+                         <ui:repeat value="#{gramaticaBibliotecaLibreControlador.gramaticaModeloLista}" var="gramatica" varStatus="conteo">
+                             <li>
+                                 <h:panelGroup layout="block" styleClass="uk-container padding-contenedor estilo-contenedor">
+                                     <span><h:outputText value="#{gramatica.palabra}" escape="false" /></span>
+                                 </h:panelGroup>
+                                 <div id="calificacion-respuesta" class="uk-hidden">
+
+                                 </div>
+                                 <div class="uk-flex uk-flex-center">
+                                     <button class="boton-enviar" data-indice="#{conteo.index}">SCORE</button>
+                                 </div>
+                             </li>
+                         </ui:repeat>
+                     </ul>
+                 </h:panelGroup>
+                 <div class="uk-flex uk-flex-center">
+                     <h:button outcome="atras" styleClass="boton-enviar uk-margin-medium-right" value="#{boton['back']}"/>
+                     <h:button outcome="siguiente" styleClass="boton-enviar" value="#{boton['next']}"/>
+                 </div>
+             </div>
+        </div>
+
+        <script type="application/javascript" src="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/js/alumno/order-free-library.js" ></script>
+    </ui:define>
+</ui:composition>
+</html>

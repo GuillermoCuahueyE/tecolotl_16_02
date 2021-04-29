@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Error Inesperado</title>
+    <link rel="stylesheet" href="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/css/error.css"/>
+
+</h:head>
+<h:body>
+    <div class="imagen-error">
+        <h:graphicImage url="https://tecolotl-multimedia.nyc3.digitaloceanspaces.com/Tecolotl/resources/img/fondo/no-existe.svg" />
+    </div>
+    <p>Estimado usuario, por el momento no podemos atender su petición, favor de intentar más tarde</p>
+    <ui:remove><button onclick="window.history.back()">#{boton['back']}</button></ui:remove>
+    <h:button  value="#{boton['back']}" outcome="regresar"/>
+</h:body>
+</html>
