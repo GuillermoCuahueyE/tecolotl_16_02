@@ -1,9 +1,6 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <jboss-web xmlns="http://www.jboss.com/xml/ns/javaee" version="8.0">
-    <security-domain>aplicacionTecolotlDomain</security-domain><!--
-<security-domain>aplicacionTecolotlPruebasDomain</security-domain>
---><!--
-<security-domain>aplicacionTecolotlDesarrolloDomain</security-domain>
---><virtual-host>www.e-squadron.com.mx</virtual-host>
+    <context-root>/tecolotl</context-root>
+    <security-domain>aplicacionTecolotlDomain</security-domain>
 </jboss-web>
-
